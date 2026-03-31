@@ -61,7 +61,7 @@ button:disabled {
   background-color: #2bd97c;
   color: #032b41;
   width: 100%;
-  height: 40px;
+  height: 44px;
   border-radius: 4px;
   font-size: 16px;
   transition: background-color 200ms;
@@ -566,9 +566,10 @@ button:disabled {
 
 .modal {
   background: white;
-  padding: 24px;
+  padding: 32px 24px;
   border-radius: 8px;
-  width: 320px;
+  width: 400px;       
+  max-width: 90vw;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -584,4 +585,95 @@ button:disabled {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+
+.modal__title {
+  text-align: center;
+  margin-bottom: 16px;
+  color: #032b41;
+}
+
+.modal__social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  height: 40px;
+  border-radius: 4px;
+  background-color: #4a6eb5;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.modal__guest {
+  background-color: #3b5998;
+}
+
+.modal__divider {
+  display: flex;
+  align-items: center;
+  margin: 12px 0;
+}
+
+.modal__divider::before,
+.modal__divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #ccc;
+}
+
+.modal__divider span {
+  margin: 0 8px;
+  font-size: 14px;
+}
+
+.modal__error {
+  color: red;
+  font-size: 14px;
+}
+
+.modal__link {
+  text-align: center;
+  font-size: 14px;
+  color: #0365f2;
+  cursor: pointer;
+}
+
+.modal__signup {
+  margin-top: 8px;
+}
+
+.modal__google {
+  background: #4285f4;
+  color: white;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 4px;
+}
+
+.google__icon {
+  background: white;
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 2px;
+}
+
+.google__icon img {
+  width: 16px;   /* 🔥 THIS fixes your issue */
+  height: 16px;
 }
