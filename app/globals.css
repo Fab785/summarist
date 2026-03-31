@@ -553,11 +553,8 @@ button:disabled {
 /* MODAL */
 .modal__overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -565,56 +562,76 @@ button:disabled {
 }
 
 .modal {
+  position: relative;
   background: white;
-  padding: 32px 24px;
-  border-radius: 8px;
-  width: 400px;       
+  width: 370px;
   max-width: 90vw;
+  padding: 32px 24px 20px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .modal__close {
-  align-self: flex-end;
-  font-size: 16px;
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  line-height: 1;
   cursor: pointer;
+  color: #111;
 }
-
-.modal input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
 
 .modal__title {
   text-align: center;
-  margin-bottom: 16px;
   color: #032b41;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 14px;
+}
+
+.modal input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d4dbe3;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+}
+
+.modal input::placeholder {
+  color: #7d7d7d;
 }
 
 .modal__social {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-
-  height: 40px;
+  gap: 10px;
+  height: 42px;
   border-radius: 4px;
-  background-color: #4a6eb5;
   color: white;
-  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
 }
 
 .modal__guest {
-  background-color: #3b5998;
+  background-color: #4a63ad;
+}
+
+.modal__google {
+  background: #4285f4;
 }
 
 .modal__divider {
   display: flex;
   align-items: center;
-  margin: 12px 0;
+  margin: 8px 0;
 }
 
 .modal__divider::before,
@@ -622,58 +639,200 @@ button:disabled {
   content: "";
   flex: 1;
   height: 1px;
-  background: #ccc;
+  background: #d9d9d9;
 }
 
 .modal__divider span {
-  margin: 0 8px;
+  margin: 0 12px;
   font-size: 14px;
+  color: #444;
+  font-weight: 500;
+}
+
+.google__icon {
+  width: 24px;
+  height: 24px;
+  background: white;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.google__icon img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
 }
 
 .modal__error {
   color: red;
+  font-size: 13px;
+  margin: 0;
+}
+
+/* MODAL */
+.modal__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  position: relative;
+  background: white;
+  width: 425px;
+  max-width: 92vw;
+  padding: 34px 26px 0;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal__close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  color: #111;
+}
+
+.modal__title {
+  text-align: center;
+  color: #032b41;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 22px 0 24px;
+}
+
+.modal__social {
+  position: relative;
+  width: 100%;
+  height: 44px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.modal__guest {
+  background: #4b61ad;
+}
+
+.modal__google {
+  background: #4a86ee;
+}
+
+.modal__social svg {
+  position: absolute;
+  left: 18px;
+  font-size: 20px;
+}
+
+.google__icon {
+  position: absolute;
+  left: 12px;
+  width: 36px;
+  height: 36px;
+  background: white;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.google__icon img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.modal__divider {
+  display: flex;
+  align-items: center;
+  margin: 10px 0 18px;
+}
+
+.modal__divider::before,
+.modal__divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #d8dee4;
+}
+
+.modal__divider span {
+  margin: 0 14px;
   font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.modal input {
+  width: 100%;
+  height: 46px;
+  padding: 0 16px;
+  margin-bottom: 14px;
+  border: 1px solid #cfd8df;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+}
+
+.modal input::placeholder {
+  color: #7a7a7a;
+}
+
+.modal__error {
+  color: red;
+  font-size: 13px;
+  margin: 0 0 10px;
+}
+
+.btn {
+  width: 100%;
+  height: 46px;
+  border: none;
+  border-radius: 4px;
+  background: #2fda7d;
+  color: #032b41;
+  font-size: 17px;
+  font-weight: 500;
+  cursor: pointer;
+  margin: 6px 0 20px;
 }
 
 .modal__link {
   text-align: center;
   font-size: 14px;
-  color: #0365f2;
+  color: #1565f5;
   cursor: pointer;
+  margin: 0 0 16px;
 }
 
 .modal__signup {
-  margin-top: 8px;
-}
-
-.modal__google {
-  background: #4285f4;
-  color: white;
-  height: 44px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 4px;
-}
-
-.google__icon {
-  background: white;
-  width: 28px;
-  height: 28px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 2px;
-}
-
-.google__icon img {
-  width: 16px;   /* 🔥 THIS fixes your issue */
-  height: 16px;
+  margin: 0;
+  padding: 16px 0 18px;
+  border-top: 1px solid #eef1f4;
+  background: #f7f9f9;
+  margin-left: -26px;
+  margin-right: -26px;
+  margin-top: 2px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }

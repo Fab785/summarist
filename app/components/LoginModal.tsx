@@ -17,20 +17,22 @@ const LoginModal: FC<LoginModalProps> = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
-  // 🔐 LOGIN LOGIC
   const handleLogin = () => {
     setError("");
 
     if (!email.includes("@")) {
-      return setError("Invalid email");
+      setError("Invalid email");
+      return;
     }
 
     if (password.length < 6) {
-      return setError("Password too short");
+      setError("Password too short");
+      return;
     }
 
     if (email !== "guest@gmail.com" || password !== "guest123") {
-      return setError("User not found");
+      setError("User not found");
+      return;
     }
 
     router.push("/for-you");
@@ -45,42 +47,31 @@ const LoginModal: FC<LoginModalProps> = ({ isOpen, onClose }) => {
   return (
     <div className="modal__overlay" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
+        <button className="modal__close" onClick={onClose} aria-label="Close modal">
+          ×
+        </button>
 
-        {/* HEADER */}
-        <div className="modal__header">
-          <h2 className="modal__title">Log in to Summarist</h2>
-          <button className="modal__close" onClick={onClose}>
-            ×
-          </button>
-        </div>
+        <h2 className="modal__title">Log in to Summarist</h2>
 
-        {/* GUEST LOGIN */}
         <button
-          className="modal__social modal__guest"
-          onClick={handleGuestLogin}
-        >
-          <FaUser /> Login as a Guest
-        </button>
+  className="modal__social modal__guest"
+  onClick={handleGuestLogin}
+>
+  <FaUser />
+  <span>Login as a Guest</span>
+</button>
 
-        {/* DIVIDER */}
+<button className="modal__social modal__google">
+  <span className="google__icon">
+    <img src="/assets/google.png" alt="Google" />
+  </span>
+  <span>Login with Google</span>
+</button>
+
         <div className="modal__divider">
           <span>or</span>
         </div>
 
-        {/* GOOGLE */}
-        <button className="modal__social modal__google">
-        <span className="google__icon">
-        <img src="/assets/google.png" alt="google" />
-          </span>
-            Login with Google
-        </button>
-
-        {/* DIVIDER */}
-        <div className="modal__divider">
-          <span>or</span>
-        </div>
-
-        {/* INPUTS */}
         <input
           type="email"
           placeholder="Email Address"
@@ -95,20 +86,14 @@ const LoginModal: FC<LoginModalProps> = ({ isOpen, onClose }) => {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        {/* ERROR */}
         {error && <p className="modal__error">{error}</p>}
 
-        {/* LOGIN */}
         <button className="btn" onClick={handleLogin}>
           Login
         </button>
 
-        {/* FOOTER */}
         <p className="modal__link">Forgot your password?</p>
-        <p className="modal__link modal__signup">
-          Don’t have an account?
-        </p>
-
+        <p className="modal__link modal__signup">Don’t have an account?</p>
       </div>
     </div>
   );
