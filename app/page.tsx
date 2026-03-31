@@ -4,6 +4,7 @@ import { useState } from "react";
 import Navbar from "./components/Navbar";
 import Landing from "./components/Landing";
 import Features from "./components/Features";
+import StatsSection from "./components/StatsSection";
 import LoginModal from "./components/LoginModal";
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
       <Navbar onLoginClick={() => setIsLoginOpen(true)} />
       <Landing onLoginClick={() => setIsLoginOpen(true)} />
       <Features />
+      <StatsSection />
 
       <LoginModal
         isOpen={isLoginOpen}

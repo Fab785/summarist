@@ -49,11 +49,10 @@ button:disabled {
   max-width: 1070px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 24px;
 }
 
 .container {
-  padding: 40px 0;
+  padding: 40px 24px;
   width: 100%;
 }
 
@@ -564,7 +563,7 @@ button:disabled {
 .modal {
   position: relative;
   background: white;
-  width: 425px;
+  width: 410px;
   max-width: 92vw;
   padding: 24px 24px 0;
   border-radius: 10px;
@@ -716,4 +715,68 @@ button:disabled {
   border-top: 1px solid #eef1f4;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
+}
+/* STATS */
+
+.stats {
+  padding: 96px 0 40px;
+}
+
+.stats__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 56px;
+  margin-bottom: 88px;
+}
+
+.stats__wrapper--reverse {
+  flex-direction: row-reverse;
+}
+
+.stats__text {
+  flex: 1;
+  max-width: 460px;
+}
+
+.stats__text--right {
+  text-align: center;
+}
+
+.stats__heading {
+  font-size: 32px;
+  line-height: 1.25;
+  font-weight: 700;
+  color: #6b757b;
+  margin-bottom: 18px;
+  transition: color 0.35s ease;
+}
+
+.stats__heading.active {
+  color: #2bd97c;
+}
+
+.stats__card {
+  flex: 1;
+  max-width: 520px;
+  background: #f1f4f4;
+  padding: 34px 36px;
+  border-radius: 2px;
+}
+
+.stats__card p {
+  font-size: 17px;
+  line-height: 1.45;
+  color: #394547;
+  margin-bottom: 28px;
+}
+
+.stats__card p:last-child {
+  margin-bottom: 0;
+}
+
+.stats__card span {
+  color: #2f6df6;
+  font-weight: 700;
+  margin-right: 8px;
 }
