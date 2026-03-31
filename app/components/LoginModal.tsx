@@ -54,19 +54,23 @@ const LoginModal: FC<LoginModalProps> = ({ isOpen, onClose }) => {
         <h2 className="modal__title">Log in to Summarist</h2>
 
         <button
-  className="modal__social modal__guest"
-  onClick={handleGuestLogin}
->
-  <FaUser />
-  <span>Login as a Guest</span>
-</button>
+          className="modal__social modal__guest"
+          onClick={handleGuestLogin}
+        >
+          <FaUser className="modal__social-icon" />
+          <span className="modal__social-text">Login as a Guest</span>
+        </button>
 
-<button className="modal__social modal__google">
-  <span className="google__icon">
-    <img src="/assets/google.png" alt="Google" />
-  </span>
-  <span>Login with Google</span>
-</button>
+        <div className="modal__divider">
+          <span>or</span>
+        </div>
+
+        <button className="modal__social modal__google">
+          <span className="google__icon">
+            <img src="/assets/google.png" alt="Google" />
+          </span>
+          <span className="modal__social-text">Login with Google</span>
+        </button>
 
         <div className="modal__divider">
           <span>or</span>
