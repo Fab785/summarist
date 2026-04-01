@@ -733,11 +733,12 @@ button:disabled {
 .stats__text,
 .stats__card {
   width: 100%;
-  max-width: 500px;
+  max-width: 560px;
 }
 
 .stats__text--right {
-  text-align: center;
+  text-align: right;
+  margin-left: auto;
 }
 
 .stats__heading {
@@ -754,16 +755,19 @@ button:disabled {
 }
 
 .stats__card {
+  flex: 1;
+  width: 100%;
+  max-width: 560px;
   background: #f1f4f4;
-  padding: 36px 40px;
-  border-radius: 2px;
+  padding: 44px 48px;
+  border-radius: 4px;
 }
 
 .stats__card p {
   font-size: 17px;
-  line-height: 1.45;
+  line-height: 1.6;
   color: #394547;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
 .stats__card p:last-child {
@@ -772,6 +776,6 @@ button:disabled {
 
 .stats__card span {
   color: #2f6df6;
-  font-weight: 700;
-  margin-right: 8px;
+  font-weight: 800;
+  margin-right: 10px;
 }
