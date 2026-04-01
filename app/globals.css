@@ -52,7 +52,7 @@ button:disabled {
 }
 
 .container {
-  padding: 40px 24px;
+  padding: 40px 24px 0;
   width: 100%;
 }
 
@@ -725,18 +725,15 @@ button:disabled {
 .stats__wrapper {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 56px;
-  margin-bottom: 88px;
+  justify-content: center;
+  gap: 72px;
+  margin-bottom: 96px;
 }
 
-.stats__wrapper--reverse {
-  flex-direction: row-reverse;
-}
-
-.stats__text {
-  flex: 1;
-  max-width: 460px;
+.stats__text,
+.stats__card {
+  width: 100%;
+  max-width: 500px;
 }
 
 .stats__text--right {
@@ -757,10 +754,8 @@ button:disabled {
 }
 
 .stats__card {
-  flex: 1;
-  max-width: 520px;
   background: #f1f4f4;
-  padding: 34px 36px;
+  padding: 36px 40px;
   border-radius: 2px;
 }
 

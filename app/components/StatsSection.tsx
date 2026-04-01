@@ -62,7 +62,7 @@ export default function StatsSection() {
             </div>
           </div>
 
-          <div className="stats__wrapper stats__wrapper--reverse">
+          <div className="stats__wrapper">
             <div className="stats__card">
               <p>
                 <span>91%</span> of Summarist members <b>report feeling more productive</b>{" "}
