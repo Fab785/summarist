@@ -19,7 +19,7 @@ export default function Home() {
       <Landing onLoginClick={() => setIsLoginOpen(true)} />
       <Features />
       <StatsSection />
-      <TestimonialsSection />
+      <TestimonialsSection onLoginClick={() => setIsLoginOpen(true)} />
       <GrowthSection/>
       <Footer/>
 

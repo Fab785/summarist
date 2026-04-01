@@ -19,7 +19,13 @@ const testimonials = [
   },
 ];
 
-export default function TestimonialsSection() {
+type TestimonialsSectionProps = {
+  onLoginClick: () => void;
+};
+
+export default function TestimonialsSection({
+  onLoginClick,
+}: TestimonialsSectionProps) {
   return (
     <section className="testimonials">
       <div className="container">
@@ -39,7 +45,13 @@ export default function TestimonialsSection() {
             ))}
           </div>
 
-          <button className="btn testimonials__btn">Login</button>
+          <button
+            className="btn testimonials__btn"
+            onClick={onLoginClick}
+            type="button"
+          >
+            Login
+          </button>
         </div>
       </div>
     </section>
