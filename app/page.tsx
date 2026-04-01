@@ -6,6 +6,7 @@ import Landing from "./components/Landing";
 import Features from "./components/Features";
 import StatsSection from "./components/StatsSection";
 import LoginModal from "./components/LoginModal";
+import TestimonialsSection from "./components/TestimonialsSection";
 
 export default function Home() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -16,6 +17,7 @@ export default function Home() {
       <Landing onLoginClick={() => setIsLoginOpen(true)} />
       <Features />
       <StatsSection />
+      <TestimonialsSection />
 
       <LoginModal
         isOpen={isLoginOpen}
