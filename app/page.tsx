@@ -7,6 +7,8 @@ import Features from "./components/Features";
 import StatsSection from "./components/StatsSection";
 import LoginModal from "./components/LoginModal";
 import TestimonialsSection from "./components/TestimonialsSection";
+import GrowthSection from "./components/GrowthSection";
+import Footer from "./components/Footer";
 
 export default function Home() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -18,6 +20,8 @@ export default function Home() {
       <Features />
       <StatsSection />
       <TestimonialsSection />
+      <GrowthSection/>
+      <Footer/>
 
       <LoginModal
         isOpen={isLoginOpen}
