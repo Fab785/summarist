@@ -2,7 +2,18 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { FaSearch, FaClock, FaStar, FaBookmark, FaRegCompass, FaPen, FaCog, FaQuestionCircle, FaSignOutAlt, FaPlay } from "react-icons/fa";
+import {
+  FaSearch,
+  FaClock,
+  FaStar,
+  FaBookmark,
+  FaRegCompass,
+  FaPen,
+  FaCog,
+  FaQuestionCircle,
+  FaSignOutAlt,
+  FaPlay,
+} from "react-icons/fa";
 
 type Book = {
   id: string;
@@ -43,9 +54,9 @@ export default function ForYouPage() {
           "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=suggested"
         ).then((res) => res.json());
 
-        setSelectedBook(selected);
-        setRecommendedBooks(recommended);
-        setSuggestedBooks(suggested);
+        setSelectedBook(Array.isArray(selected) ? selected[0] : selected);
+        setRecommendedBooks(Array.isArray(recommended) ? recommended : []);
+        setSuggestedBooks(Array.isArray(suggested) ? suggested : []);
       } catch (error) {
         console.error("Error fetching books:", error);
       }
@@ -54,11 +65,8 @@ export default function ForYouPage() {
     fetchBooks();
   }, []);
 
-  const formatDuration = (audioLink: string) => {
-    const match = audioLink?.match(/(\d+):(\d+)/);
-    if (!match) return "00:00";
-    const [, minutes, seconds] = match;
-    return `${minutes.padStart(2, "0")}:${seconds.padStart(2, "0")}`;
+  const formatDuration = () => {
+    return "00:00";
   };
 
   const renderBookCard = (book: Book) => {
@@ -68,7 +76,9 @@ export default function ForYouPage() {
           {book.subscriptionRequired && (
             <div className="for-you__pill">Premium</div>
           )}
+
           <div className="for-you__book-image-bg" />
+
           <img
             src={book.imageLink}
             alt={book.title}
@@ -83,7 +93,7 @@ export default function ForYouPage() {
         <div className="for-you__book-meta">
           <span className="for-you__book-meta-item">
             <FaClock />
-            {formatDuration(book.audioLink)}
+            {formatDuration()}
           </span>
           <span className="for-you__book-meta-item">
             <FaStar />
@@ -158,7 +168,9 @@ export default function ForYouPage() {
             {selectedBook && (
               <Link href={`/book/${selectedBook.id}`} className="for-you__selected-card">
                 <div className="for-you__selected-left">
-                  <p className="for-you__selected-subtitle">{selectedBook.subTitle}</p>
+                  <p className="for-you__selected-subtitle">
+                    {selectedBook.subTitle}
+                  </p>
                 </div>
 
                 <div className="for-you__selected-divider" />
@@ -180,7 +192,7 @@ export default function ForYouPage() {
                     <div className="for-you__selected-play">
                       <FaPlay />
                     </div>
-                    <span>{formatDuration(selectedBook.audioLink).replace(":", " mins ")} secs</span>
+                    <span>{formatDuration()}</span>
                   </div>
                 </div>
               </Link>
@@ -192,7 +204,7 @@ export default function ForYouPage() {
             <p className="for-you__section-subtitle">We think you&apos;ll like these</p>
 
             <div className="for-you__books-row">
-              {recommendedBooks.map(renderBookCard)}
+              {recommendedBooks.slice(0, 5).map(renderBookCard)}
             </div>
           </section>
 
@@ -201,7 +213,7 @@ export default function ForYouPage() {
             <p className="for-you__section-subtitle">Browse more great reads</p>
 
             <div className="for-you__books-row">
-              {suggestedBooks.map(renderBookCard)}
+              {suggestedBooks.slice(0, 5).map(renderBookCard)}
             </div>
           </section>
         </div>

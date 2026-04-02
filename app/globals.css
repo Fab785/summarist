@@ -1180,8 +1180,8 @@ button:disabled {
 
 .for-you__pill {
   position: absolute;
-  top: 0;
-  right: 12px;
+  top: -8px;
+  right: 8px;
   background: #032b41;
   color: #fff;
   font-size: 11px;
