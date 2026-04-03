@@ -951,7 +951,7 @@ button:disabled {
 }
 
 .for-you__logo {
-  padding: 8px 24px 14px;
+  padding: 12px 24px 8px; /* smaller bottom padding */
 }
 
 .for-you__logo img {
@@ -963,7 +963,7 @@ button:disabled {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-top: 12px;
+  margin-top: 24px;
 }
 
 .for-you__sidebar-bottom {
