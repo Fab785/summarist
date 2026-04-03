@@ -939,20 +939,19 @@ button:disabled {
 }
 
 .for-you__sidebar {
-  width: 200px;
+  width: 212px;
   background: #ffffff;
   border-right: 1px solid #e6ece8;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 20px 0;
   position: sticky;
   top: 0;
   height: 100vh;
+  padding: 8px 0 12px;
 }
 
 .for-you__logo {
-  padding: 0 24px 24px;
+  padding: 8px 24px 14px;
 }
 
 .for-you__logo img {
@@ -960,11 +959,19 @@ button:disabled {
   display: block;
 }
 
-.for-you__nav,
+.for-you__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+}
+
 .for-you__sidebar-bottom {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 20px;
 }
 
 .for-you__nav-link {
