@@ -1,5 +1,7 @@
 "use client";
 
+import { HiOutlineHome, HiOutlineBookmark } from "react-icons/hi";
+import { FiEdit3, FiSearch, FiSettings, FiHelpCircle, FiLogOut } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
@@ -73,9 +75,7 @@ export default function ForYouPage() {
     return (
       <Link href={`/book/${book.id}`} key={book.id} className="for-you__book-card">
         <div className="for-you__book-image-wrapper">
-          {book.subscriptionRequired && (
-            <div className="for-you__pill">Premium</div>
-          )}
+         
 
           <div className="for-you__book-image-bg" />
 
@@ -112,42 +112,42 @@ export default function ForYouPage() {
         </div>
 
         <nav className="for-you__nav">
-          <Link href="/for-you" className="for-you__nav-link active">
-            <FaRegCompass />
-            <span>For you</span>
-          </Link>
+        <Link href="/for-you" className="for-you__nav-link active">
+  <HiOutlineHome />
+  <span>For you</span>
+</Link>
 
-          <button className="for-you__nav-link" type="button">
-            <FaBookmark />
-            <span>My Library</span>
-          </button>
+<button className="for-you__nav-link" type="button">
+  <HiOutlineBookmark />
+  <span>My Library</span>
+</button>
 
-          <button className="for-you__nav-link" type="button">
-            <FaPen />
-            <span>Highlights</span>
-          </button>
+<button className="for-you__nav-link" type="button">
+  <FiEdit3 />
+  <span>Highlights</span>
+</button>
 
-          <button className="for-you__nav-link" type="button">
-            <FaSearch />
-            <span>Search</span>
-          </button>
+<button className="for-you__nav-link" type="button">
+  <FiSearch />
+  <span>Search</span>
+</button>
         </nav>
 
         <div className="for-you__sidebar-bottom">
-          <button className="for-you__nav-link" type="button">
-            <FaCog />
-            <span>Settings</span>
-          </button>
+        <button className="for-you__nav-link" type="button">
+  <FiSettings />
+  <span>Settings</span>
+</button>
 
-          <button className="for-you__nav-link" type="button">
-            <FaQuestionCircle />
-            <span>Help &amp; Support</span>
-          </button>
+<button className="for-you__nav-link" type="button">
+  <FiHelpCircle />
+  <span>Help &amp; Support</span>
+</button>
 
-          <button className="for-you__nav-link" type="button">
-            <FaSignOutAlt />
-            <span>Logout</span>
-          </button>
+<button className="for-you__nav-link" type="button">
+  <FiLogOut />
+  <span>Logout</span>
+</button>
         </div>
       </aside>
 
