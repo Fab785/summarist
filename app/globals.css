@@ -988,6 +988,12 @@ button:disabled {
   text-align: left;
 }
 
+.for-you__nav-link svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
 .for-you__nav-link.active {
   position: relative;
   background: #f3fbf6;
