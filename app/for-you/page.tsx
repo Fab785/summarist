@@ -1,21 +1,11 @@
 "use client";
 
 import { HiOutlineHome, HiOutlineBookmark } from "react-icons/hi";
+import LoginModal from "../components/LoginModal";
 import { FiEdit3, FiSearch, FiSettings, FiHelpCircle, FiLogOut } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  FaSearch,
-  FaClock,
-  FaStar,
-  FaBookmark,
-  FaRegCompass,
-  FaPen,
-  FaCog,
-  FaQuestionCircle,
-  FaSignOutAlt,
-  FaPlay,
-} from "react-icons/fa";
+import { FaSearch, FaClock, FaStar, FaPlay } from "react-icons/fa";
 
 type Book = {
   id: string;
@@ -40,8 +30,17 @@ export default function ForYouPage() {
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [recommendedBooks, setRecommendedBooks] = useState<Book[]>([]);
   const [suggestedBooks, setSuggestedBooks] = useState<Book[]>([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   useEffect(() => {
+    const syncLoginState = () => {
+      const storedLogin = localStorage.getItem("isLoggedIn");
+      setIsLoggedIn(storedLogin !== "false");
+    };
+
+    syncLoginState();
+
     const fetchBooks = async () => {
       try {
         const selected = await fetch(
@@ -65,7 +64,25 @@ export default function ForYouPage() {
     };
 
     fetchBooks();
+
+    window.addEventListener("storage", syncLoginState);
+    return () => window.removeEventListener("storage", syncLoginState);
   }, []);
+
+  const handleLogout = () => {
+    localStorage.setItem("isLoggedIn", "false");
+    setIsLoggedIn(false);
+  };
+
+  const handleLoginClick = () => {
+    setIsLoginModalOpen(true);
+  };
+
+  const handleLoginModalClose = () => {
+    setIsLoginModalOpen(false);
+    const storedLogin = localStorage.getItem("isLoggedIn");
+    setIsLoggedIn(storedLogin !== "false");
+  };
 
   const formatDuration = () => {
     return "00:00";
@@ -75,7 +92,9 @@ export default function ForYouPage() {
     return (
       <Link href={`/book/${book.id}`} key={book.id} className="for-you__book-card">
         <div className="for-you__book-image-wrapper">
-         
+          {!isLoggedIn && book.subscriptionRequired && (
+            <span className="for-you__premium-pill">Premium</span>
+          )}
 
           <div className="for-you__book-image-bg" />
 
@@ -112,42 +131,49 @@ export default function ForYouPage() {
         </div>
 
         <nav className="for-you__nav">
-        <Link href="/for-you" className="for-you__nav-link active">
-  <HiOutlineHome />
-  <span>For you</span>
-</Link>
+          <Link href="/for-you" className="for-you__nav-link active">
+            <HiOutlineHome />
+            <span>For you</span>
+          </Link>
 
-<button className="for-you__nav-link" type="button">
-  <HiOutlineBookmark />
-  <span>My Library</span>
-</button>
+          <button className="for-you__nav-link" type="button">
+            <HiOutlineBookmark />
+            <span>My Library</span>
+          </button>
 
-<button className="for-you__nav-link" type="button">
-  <FiEdit3 />
-  <span>Highlights</span>
-</button>
+          <button className="for-you__nav-link" type="button">
+            <FiEdit3 />
+            <span>Highlights</span>
+          </button>
 
-<button className="for-you__nav-link" type="button">
-  <FiSearch />
-  <span>Search</span>
-</button>
+          <button className="for-you__nav-link" type="button">
+            <FiSearch />
+            <span>Search</span>
+          </button>
         </nav>
 
         <div className="for-you__sidebar-bottom">
-        <button className="for-you__nav-link" type="button">
-  <FiSettings />
-  <span>Settings</span>
-</button>
+          <button className="for-you__nav-link" type="button">
+            <FiSettings />
+            <span>Settings</span>
+          </button>
 
-<button className="for-you__nav-link" type="button">
-  <FiHelpCircle />
-  <span>Help &amp; Support</span>
-</button>
+          <button className="for-you__nav-link" type="button">
+            <FiHelpCircle />
+            <span>Help &amp; Support</span>
+          </button>
 
-<button className="for-you__nav-link" type="button">
-  <FiLogOut />
-  <span>Logout</span>
-</button>
+          {isLoggedIn ? (
+            <button className="for-you__nav-link" type="button" onClick={handleLogout}>
+              <FiLogOut />
+              <span>Logout</span>
+            </button>
+          ) : (
+            <button className="for-you__nav-link" type="button" onClick={handleLoginClick}>
+              <FiLogOut />
+              <span>Login</span>
+            </button>
+          )}
         </div>
       </aside>
 
@@ -168,9 +194,7 @@ export default function ForYouPage() {
             {selectedBook && (
               <Link href={`/book/${selectedBook.id}`} className="for-you__selected-card">
                 <div className="for-you__selected-left">
-                  <p className="for-you__selected-subtitle">
-                    {selectedBook.subTitle}
-                  </p>
+                  <p className="for-you__selected-subtitle">{selectedBook.subTitle}</p>
                 </div>
 
                 <div className="for-you__selected-divider" />
@@ -218,6 +242,11 @@ export default function ForYouPage() {
           </section>
         </div>
       </main>
+
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={handleLoginModalClose}
+      />
     </div>
   );
 }

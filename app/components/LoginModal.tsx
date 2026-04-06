@@ -35,13 +35,15 @@ const LoginModal: FC<LoginModalProps> = ({ isOpen, onClose }) => {
       return;
     }
 
-    router.push("/for-you");
+    localStorage.setItem("isLoggedIn", "true");
     onClose();
+    router.push("/for-you");
   };
 
   const handleGuestLogin = () => {
-    router.push("/for-you");
+    localStorage.setItem("isLoggedIn", "true");
     onClose();
+    router.push("/for-you");
   };
 
   return (

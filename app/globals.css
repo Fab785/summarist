@@ -1259,6 +1259,20 @@ button:disabled {
   margin-bottom: 14px;
 }
 
+.for-you__premium-pill {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 3;
+  background: #032b41;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
 .for-you__book-image-bg {
   position: absolute;
   bottom: 0;
