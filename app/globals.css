@@ -49,11 +49,13 @@ button:disabled {
   max-width: 1070px;
   width: 100%;
   margin: 0 auto;
+  padding: 0 24px;
 }
 
 .container {
   padding: 40px 24px 0;
   width: 100%;
+  margin-left: 85px;
 }
 
 .btn {
@@ -1060,7 +1062,7 @@ button:disabled {
 }
 
 .for-you__content {
-  padding: 40px;
+  padding: 40px 40px 40px 110px;
 }
 
 .for-you__section {
