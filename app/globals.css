@@ -994,11 +994,11 @@ button:disabled {
 }
 
 .for-you__nav-link:hover {
-  background-color: #e6ebea; /* darker hover */
+  background-color: #e6ebea;
 }
 
 .for-you__nav-link.active {
-  background-color: #f7faf9; /* no green bg */
+  background-color: transparent;
 }
 
 .for-you__nav-link.active::before {
@@ -1017,10 +1017,6 @@ button:disabled {
   flex-shrink: 0;
 }
 
-.for-you__nav-link.active {
-  position: relative;
-  background: #F7FAF9;
-}
 
 .for-you__nav-link.active::before {
   content: "";
