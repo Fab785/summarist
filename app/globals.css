@@ -1403,3 +1403,311 @@ button:active {
   width: 180px;
   height: 260px;
 }
+
+/* BOOKS */
+
+.book-details-page {
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+.book-details__content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 32px 60px;
+}
+
+.book-details__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #032b41;
+  text-decoration: none;
+  font-size: 14px;
+  margin-bottom: 32px;
+}
+
+.book-details__hero {
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
+  margin-bottom: 48px;
+}
+
+.book-details__image-wrap {
+  flex-shrink: 0;
+}
+
+.book-details__image {
+  width: 280px;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.book-details__info {
+  flex: 1;
+}
+
+.book-details__subtitle {
+  font-size: 14px;
+  color: #6b7c84;
+  margin-bottom: 12px;
+}
+
+.book-details__title {
+  font-size: 36px;
+  line-height: 1.1;
+  color: #032b41;
+  margin-bottom: 12px;
+}
+
+.book-details__author {
+  font-size: 18px;
+  color: #032b41;
+  margin-bottom: 20px;
+}
+
+.book-details__meta {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 24px;
+  color: #6b7c84;
+  font-size: 14px;
+}
+
+.book-details__meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.book-details__play-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #2bd97c;
+  color: #032b41;
+  border: none;
+  border-radius: 999px;
+  padding: 14px 22px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.book-details__section {
+  margin-bottom: 36px;
+}
+
+.book-details__section-title {
+  font-size: 22px;
+  color: #032b41;
+  margin-bottom: 14px;
+}
+
+.book-details__text {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #39484d;
+}
+
+.book-details__not-found {
+  font-size: 28px;
+  color: #032b41;
+}
+
+@media (max-width: 768px) {
+  .book-details__hero {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .book-details__image {
+    width: 220px;
+  }
+
+  .book-details__title {
+    font-size: 28px;
+  }
+}
+
+.book-details__content {
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 36px 40px 60px;
+}
+
+.book-details__hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+
+.book-details__info {
+  flex: 1;
+  max-width: 760px;
+}
+
+.book-details__title {
+  font-size: 38px;
+  line-height: 1.15;
+  color: #032b41;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.book-details__author {
+  font-size: 18px;
+  color: #032b41;
+  margin-bottom: 16px;
+}
+
+.book-details__author--bold {
+  font-weight: 700;
+}
+
+.book-details__subtitle {
+  font-size: 18px;
+  color: #39484d;
+  margin-bottom: 20px;
+}
+
+.book-details__divider {
+  width: 100%;
+  height: 1px;
+  background: #d9e1e0;
+  margin: 18px 0;
+}
+
+.book-details__stats {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  gap: 18px 36px;
+}
+
+.book-details__stat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #032b41;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.book-details__actions {
+  display: flex;
+  gap: 14px;
+  margin: 24px 0 20px;
+}
+
+.book-details__action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 156px;
+  height: 50px;
+  background: #032b41;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.book-details__library-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  color: #2f5bff;
+  border: none;
+  padding: 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.book-details__image-wrap {
+  position: relative;
+  width: 320px;
+  min-width: 320px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.book-details__image-bg {
+  position: absolute;
+  bottom: 0;
+  width: 320px;
+  height: 126px;
+  border-radius: 160px 160px 0 0;
+  background: #e46d6d;
+}
+
+.book-details__image {
+  position: relative;
+  z-index: 1;
+  width: 198px;
+  height: auto;
+  object-fit: contain;
+}
+
+.book-details__section {
+  margin-bottom: 40px;
+  max-width: 760px;
+}
+
+.book-details__section-title {
+  font-size: 18px;
+  color: #032b41;
+  margin-bottom: 18px;
+  font-weight: 700;
+}
+
+.book-details__tags {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.book-details__tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f6f4;
+  color: #032b41;
+  padding: 14px 18px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.book-details__text {
+  font-size: 18px;
+  line-height: 1.55;
+  color: #39484d;
+}
+
+@media (max-width: 1024px) {
+  .book-details__hero {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+  }
+
+  .book-details__image-wrap {
+    width: 280px;
+    min-width: 280px;
+  }
+
+  .book-details__image-bg {
+    width: 280px;
+    height: 110px;
+  }
+}

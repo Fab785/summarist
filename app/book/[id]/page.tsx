@@ -1,0 +1,289 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import Link from "next/link";
+import { HiOutlineHome, HiOutlineBookmark } from "react-icons/hi";
+import { FiEdit3, FiSearch, FiSettings, FiHelpCircle, FiLogOut } from "react-icons/fi";
+import { FaStar, FaClock, FaBookOpen, FaMicrophone } from "react-icons/fa";
+
+type Book = {
+  id: string;
+  author: string;
+  title: string;
+  subTitle: string;
+  imageLink: string;
+  audioLink: string;
+  totalRating: number;
+  averageRating: number;
+  keyIdeas: number;
+  type: string;
+  status: string;
+  subscriptionRequired: boolean;
+  summary: string;
+  tags: string[];
+  bookDescription: string;
+  authorDescription: string;
+};
+
+export default function BookDetailsPage() {
+  const params = useParams();
+  const id = params?.id as string;
+
+  const [book, setBook] = useState<Book | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        const [selected, recommended, suggested] = await Promise.all([
+          fetch(
+            "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=selected"
+          ).then((res) => res.json()),
+          fetch(
+            "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=recommended"
+          ).then((res) => res.json()),
+          fetch(
+            "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=suggested"
+          ).then((res) => res.json()),
+        ]);
+
+        const allBooks = [
+          ...(Array.isArray(selected) ? selected : [selected]),
+          ...(Array.isArray(recommended) ? recommended : []),
+          ...(Array.isArray(suggested) ? suggested : []),
+        ];
+
+        const matchedBook = allBooks.find(
+          (item: Book) => String(item.id) === String(id)
+        );
+
+        setBook(matchedBook || null);
+      } catch (error) {
+        console.error("Error fetching book:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchBook();
+    }
+  }, [id]);
+
+  const formatDuration = () => {
+    return "03:24";
+  };
+
+  if (loading) {
+    return (
+      <div className="for-you-page">
+        <aside className="for-you__sidebar">
+          <div className="for-you__logo">
+            <img src="/assets/logo.png" alt="Summarist" />
+          </div>
+        </aside>
+        <main className="for-you__main">
+          <div className="book-details__content">Loading...</div>
+        </main>
+      </div>
+    );
+  }
+
+  if (!book) {
+    return (
+      <div className="for-you-page">
+        <aside className="for-you__sidebar">
+          <div className="for-you__logo">
+            <img src="/assets/logo.png" alt="Summarist" />
+          </div>
+        </aside>
+
+        <main className="for-you__main">
+          <div className="book-details__content">
+            <Link href="/for-you" className="book-details__back">
+              ← Back
+            </Link>
+            <h1 className="book-details__not-found">Book not found</h1>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  return (
+    <div className="for-you-page">
+      <aside className="for-you__sidebar">
+        <div className="for-you__logo">
+          <img src="/assets/logo.png" alt="Summarist" />
+        </div>
+
+        <nav className="for-you__nav">
+          <Link
+            href="/for-you"
+            className="for-you__nav-link for-you__nav-link--clickable"
+          >
+            <HiOutlineHome />
+            <span>For you</span>
+          </Link>
+
+          <button
+            className="for-you__nav-link for-you__nav-link--clickable active"
+            type="button"
+          >
+            <HiOutlineBookmark />
+            <span>My Library</span>
+          </button>
+
+          <button
+            className="for-you__nav-link for-you__nav-link--inactive"
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
+            <FiEdit3 />
+            <span>Highlights</span>
+          </button>
+
+          <button
+            className="for-you__nav-link for-you__nav-link--inactive"
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
+            <FiSearch />
+            <span>Search</span>
+          </button>
+        </nav>
+
+        <div className="for-you__sidebar-bottom">
+          <button
+            className="for-you__nav-link for-you__nav-link--clickable"
+            type="button"
+          >
+            <FiSettings />
+            <span>Settings</span>
+          </button>
+
+          <button
+            className="for-you__nav-link for-you__nav-link--inactive"
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
+            <FiHelpCircle />
+            <span>Help &amp; Support</span>
+          </button>
+
+          <button
+            className="for-you__nav-link for-you__nav-link--clickable"
+            type="button"
+          >
+            <FiLogOut />
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      <main className="for-you__main">
+        <div className="for-you__topbar">
+          <div className="for-you__search">
+            <input type="text" placeholder="Search for books" />
+            <button type="button">
+              <FiSearch />
+            </button>
+          </div>
+        </div>
+
+        <div className="book-details__content">
+          <div className="book-details__hero">
+            <div className="book-details__info">
+              <h1 className="book-details__title">{book.title}</h1>
+              <p className="book-details__author book-details__author--bold">
+                {book.author}
+              </p>
+              <p className="book-details__subtitle">{book.subTitle}</p>
+
+              <div className="book-details__divider" />
+
+              <div className="book-details__stats">
+                <div className="book-details__stat">
+                  <FaStar />
+                  <span>{book.averageRating} (608 ratings)</span>
+                </div>
+
+                <div className="book-details__stat">
+                  <FaClock />
+                  <span>{formatDuration()}</span>
+                </div>
+
+                <div className="book-details__stat">
+                  <FaMicrophone />
+                  <span>Audio &amp; Text</span>
+                </div>
+
+                <div className="book-details__stat">
+                  <span>💡</span>
+                  <span>{book.keyIdeas} Key ideas</span>
+                </div>
+              </div>
+
+              <div className="book-details__divider" />
+
+              <div className="book-details__actions">
+                <button className="book-details__action-btn" type="button">
+                  <FaBookOpen />
+                  <span>Read</span>
+                </button>
+
+                <button className="book-details__action-btn" type="button">
+                  <FaMicrophone />
+                  <span>Listen</span>
+                </button>
+              </div>
+
+              <button className="book-details__library-link" type="button">
+                <HiOutlineBookmark />
+                <span>Add title to My Library</span>
+              </button>
+            </div>
+
+            <div className="book-details__image-wrap">
+              <div className="book-details__image-bg" />
+              <img
+                src={book.imageLink}
+                alt={book.title}
+                className="book-details__image"
+              />
+            </div>
+          </div>
+
+          <section className="book-details__section">
+            <h2 className="book-details__section-title">What&apos;s it about?</h2>
+
+            <div className="book-details__tags">
+              {book.tags?.slice(0, 2).map((tag) => (
+                <span key={tag} className="book-details__tag">
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            <p className="book-details__text">{book.bookDescription}</p>
+          </section>
+
+          <section className="book-details__section">
+            <h2 className="book-details__section-title">About the author</h2>
+            <p className="book-details__text">{book.authorDescription}</p>
+          </section>
+        </div>
+      </main>
+    </div>
+  );
+}
