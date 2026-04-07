@@ -141,27 +141,53 @@ export default function ForYouPage() {
   <span>My Library</span>
 </button>
 
-<button className="for-you__nav-link for-you__nav-link--inactive" type="button">
+{/* INACTIVE */}
+<button
+  className="for-you__nav-link for-you__nav-link--inactive"
+  type="button"
+  onClick={(e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }}
+>
   <FiEdit3 />
   <span>Highlights</span>
 </button>
 
-<button className="for-you__nav-link for-you__nav-link--inactive" type="button">
+<button
+  className="for-you__nav-link for-you__nav-link--inactive"
+  type="button"
+  onClick={(e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }}
+>
   <FiSearch />
   <span>Search</span>
 </button>
-        </nav>
 
-        <div className="for-you__sidebar-bottom">
-        <button className="for-you__nav-link for-you__nav-link--clickable" type="button">
-  <FiSettings />
-  <span>Settings</span>
-</button>
+</nav>
 
-<button className="for-you__nav-link for-you__nav-link--inactive" type="button">
-  <FiHelpCircle />
-  <span>Help &amp; Support</span>
-</button>
+<div className="for-you__sidebar-bottom">
+  <button
+    className="for-you__nav-link for-you__nav-link--clickable"
+    type="button"
+  >
+    <FiSettings />
+    <span>Settings</span>
+  </button>
+
+  <button
+    className="for-you__nav-link for-you__nav-link--inactive"
+    type="button"
+    onClick={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    }}
+  >
+    <FiHelpCircle />
+    <span>Help &amp; Support</span>
+  </button>
 
 {isLoggedIn ? (
   <button className="for-you__nav-link for-you__nav-link--clickable" type="button" onClick={handleLogout}>

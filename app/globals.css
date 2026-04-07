@@ -1018,14 +1018,21 @@ button:disabled {
   background-color: #e6ebea;
 }
 
+button:active {
+  transform: translateY(1px);
+}
+
 .for-you__nav-link--inactive {
   cursor: not-allowed;
+}
+
+.for-you__nav-link--inactive:active {
+  transform: none;
 }
 
 .for-you__nav-link--inactive:hover {
   background-color: transparent;
 }
-
 
 .for-you__nav-link svg {
   width: 24px;
