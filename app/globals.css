@@ -1412,9 +1412,8 @@ button:active {
 }
 
 .book-details__content {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 40px 32px 60px;
+  max-width: 1000px;
+  margin-left: 80px; 
 }
 
 .book-details__back {
@@ -1592,12 +1591,11 @@ button:active {
 .book-details__stat {
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: #032b41;
-  font-size: 15px;
-  font-weight: 600;
+  gap: 8px;
+  color: #39484d;
+  font-size: 14px;
+  font-weight: 500;
 }
-
 .book-details__actions {
   display: flex;
   gap: 16px;
@@ -1621,9 +1619,9 @@ button:active {
 }
 
 .book-details__library-link {
-  display: inline-flex;
+  display: inline-flex; /* keep this */
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   background: transparent;
   color: #2f5bff;
   border: none;
@@ -1631,6 +1629,7 @@ button:active {
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
+  margin-top: 10px; /* add this */
 }
 
 .book-details__image-wrap {
@@ -1673,21 +1672,16 @@ button:active {
 
 .book-details__tags {
   display: flex;
-  gap: 16px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .book-details__tag {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   background: #f1f6f4;
-  color: #032b41;
-  padding: 14px 18px;
+  padding: 10px 16px;
   border-radius: 8px;
-  font-size: 16px;
   font-weight: 600;
+  font-size: 14px;
 }
 
 .book-details__text {
