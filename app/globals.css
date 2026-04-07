@@ -989,12 +989,6 @@ button:disabled {
   background: transparent;
   text-decoration: none;
   text-align: left;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-}
-
-.for-you__nav-link:hover {
-  background-color: #e6ebea;
 }
 
 .for-you__nav-link.active {
@@ -1011,22 +1005,34 @@ button:disabled {
   background-color: #2bd97c;
 }
 
+.for-you__nav-link--clickable {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.for-you__nav-link--inactive {
+  cursor: default;
+}
+
+.for-you__nav-link--clickable:hover {
+  background-color: #e6ebea;
+}
+
+.for-you__nav-link--inactive {
+  cursor: not-allowed;
+}
+
+.for-you__nav-link--inactive:hover {
+  background-color: transparent;
+}
+
+
 .for-you__nav-link svg {
   width: 24px;
   height: 24px;
   flex-shrink: 0;
 }
 
-
-.for-you__nav-link.active::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 6px;
-  height: 100%;
-  background: #2bd97c;
-}
 
 .for-you__main {
   flex: 1;

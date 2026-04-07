@@ -131,49 +131,49 @@ export default function ForYouPage() {
         </div>
 
         <nav className="for-you__nav">
-          <Link href="/for-you" className="for-you__nav-link active">
+        <Link href="/for-you" className="for-you__nav-link for-you__nav-link--clickable active">
             <HiOutlineHome />
-            <span>For you</span>
-          </Link>
+           <span>For you</span>
+         </Link>
 
-          <button className="for-you__nav-link" type="button">
-            <HiOutlineBookmark />
-            <span>My Library</span>
-          </button>
+         <button className="for-you__nav-link for-you__nav-link--clickable" type="button">
+  <HiOutlineBookmark />
+  <span>My Library</span>
+</button>
 
-          <button className="for-you__nav-link" type="button">
-            <FiEdit3 />
-            <span>Highlights</span>
-          </button>
+<button className="for-you__nav-link for-you__nav-link--inactive" type="button">
+  <FiEdit3 />
+  <span>Highlights</span>
+</button>
 
-          <button className="for-you__nav-link" type="button">
-            <FiSearch />
-            <span>Search</span>
-          </button>
+<button className="for-you__nav-link for-you__nav-link--inactive" type="button">
+  <FiSearch />
+  <span>Search</span>
+</button>
         </nav>
 
         <div className="for-you__sidebar-bottom">
-          <button className="for-you__nav-link" type="button">
-            <FiSettings />
-            <span>Settings</span>
-          </button>
+        <button className="for-you__nav-link for-you__nav-link--clickable" type="button">
+  <FiSettings />
+  <span>Settings</span>
+</button>
 
-          <button className="for-you__nav-link" type="button">
-            <FiHelpCircle />
-            <span>Help &amp; Support</span>
-          </button>
+<button className="for-you__nav-link for-you__nav-link--inactive" type="button">
+  <FiHelpCircle />
+  <span>Help &amp; Support</span>
+</button>
 
-          {isLoggedIn ? (
-            <button className="for-you__nav-link" type="button" onClick={handleLogout}>
-              <FiLogOut />
-              <span>Logout</span>
-            </button>
-          ) : (
-            <button className="for-you__nav-link" type="button" onClick={handleLoginClick}>
-              <FiLogOut />
-              <span>Login</span>
-            </button>
-          )}
+{isLoggedIn ? (
+  <button className="for-you__nav-link for-you__nav-link--clickable" type="button" onClick={handleLogout}>
+    <FiLogOut />
+    <span>Logout</span>
+  </button>
+) : (
+  <button className="for-you__nav-link for-you__nav-link--clickable" type="button" onClick={handleLoginClick}>
+    <FiLogOut />
+    <span>Login</span>
+  </button>
+)}
         </div>
       </aside>
 
