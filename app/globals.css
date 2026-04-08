@@ -1438,7 +1438,7 @@ button:active {
 }
 
 .book-details__image {
-  width: 280px;
+  width: 300px;
   height: auto;
   display: block;
   object-fit: contain;
@@ -1634,8 +1634,8 @@ button:active {
 
 .book-details__image-wrap {
   position: relative;
-  width: 320px;
-  min-width: 320px;
+  width: 380px;
+  min-width: 380px;
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -1644,16 +1644,14 @@ button:active {
 .book-details__image-bg {
   position: absolute;
   bottom: 0;
-  width: 320px;
+  width: 360px;
   height: 126px;
-  border-radius: 160px 160px 0 0;
-  background: #e46d6d;
 }
 
 .book-details__image {
   position: relative;
   z-index: 1;
-  width: 198px;
+  width: 250px;
   height: auto;
   object-fit: contain;
 }
