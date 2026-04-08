@@ -1437,13 +1437,6 @@ button:active {
   flex-shrink: 0;
 }
 
-.book-details__image {
-  width: 300px;
-  height: auto;
-  display: block;
-  object-fit: contain;
-}
-
 .book-details__info {
   flex: 1;
 }
@@ -1651,9 +1644,14 @@ button:active {
 .book-details__image {
   position: relative;
   z-index: 1;
-  width: 250px;
+  width: 300px;
   height: auto;
   object-fit: contain;
+  display: block;
+}
+
+.book-details__hero {
+  gap: 28px;
 }
 
 .book-details__section {
