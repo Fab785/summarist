@@ -237,15 +237,15 @@ export default function BookDetailsPage() {
               <div className="book-details__divider" />
 
               <div className="book-details__actions">
-                <button className="book-details__action-btn" type="button">
-                  <FaBookOpen />
-                  <span>Read</span>
-                </button>
+                 <Link href={`/player/${book.id}`} className="book-details__action-btn">
+                   <FaBookOpen />
+                   <span>Read</span>
+                </Link>
 
-                <button className="book-details__action-btn" type="button">
-                  <FaMicrophone />
-                  <span>Listen</span>
-                </button>
+                 <Link href={`/player/${book.id}`} className="book-details__action-btn">
+                     <FaMicrophone />
+                     <span>Listen</span>
+                  </Link>
               </div>
 
               <button className="book-details__library-link" type="button">
