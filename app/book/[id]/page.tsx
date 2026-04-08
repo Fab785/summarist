@@ -128,7 +128,7 @@ export default function BookDetailsPage() {
           </Link>
 
           <button
-            className="for-you__nav-link for-you__nav-link--clickable active"
+            className="for-you__nav-link for-you__nav-link--clickable"
             type="button"
           >
             <HiOutlineBookmark />
