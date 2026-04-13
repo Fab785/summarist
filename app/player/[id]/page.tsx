@@ -34,19 +34,16 @@ export default function PlayerPage() {
   const [book, setBook] = useState<Book | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // ✅ NEW: font size state
+  const [fontSize, setFontSize] = useState(17);
+
   useEffect(() => {
     const fetchBook = async () => {
       try {
         const [selected, recommended, suggested] = await Promise.all([
-          fetch(
-            "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=selected"
-          ).then((res) => res.json()),
-          fetch(
-            "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=recommended"
-          ).then((res) => res.json()),
-          fetch(
-            "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=suggested"
-          ).then((res) => res.json()),
+          fetch("https://us-central1-summaristt.cloudfunctions.net/getBooks?status=selected").then((res) => res.json()),
+          fetch("https://us-central1-summaristt.cloudfunctions.net/getBooks?status=recommended").then((res) => res.json()),
+          fetch("https://us-central1-summaristt.cloudfunctions.net/getBooks?status=suggested").then((res) => res.json()),
         ]);
 
         const allBooks = [
@@ -104,11 +101,35 @@ export default function PlayerPage() {
           </button>
         </nav>
 
+        {/* ✅ UPDATED FONT CONTROLS */}
         <div className="player-page__font-controls">
-          <button className="player-page__font-btn player-page__font-btn--active">Aa</button>
-          <button className="player-page__font-btn">Aa</button>
-          <button className="player-page__font-btn">Aa</button>
-          <button className="player-page__font-btn">Aa</button>
+          <button
+            className={`player-page__font-btn ${fontSize === 15 ? "player-page__font-btn--active" : ""}`}
+            onClick={() => setFontSize(15)}
+          >
+            Aa
+          </button>
+
+          <button
+            className={`player-page__font-btn ${fontSize === 17 ? "player-page__font-btn--active" : ""}`}
+            onClick={() => setFontSize(17)}
+          >
+            Aa
+          </button>
+
+          <button
+            className={`player-page__font-btn ${fontSize === 19 ? "player-page__font-btn--active" : ""}`}
+            onClick={() => setFontSize(19)}
+          >
+            Aa
+          </button>
+
+          <button
+            className={`player-page__font-btn ${fontSize === 22 ? "player-page__font-btn--active" : ""}`}
+            onClick={() => setFontSize(22)}
+          >
+            Aa
+          </button>
         </div>
 
         <div className="for-you__sidebar-bottom">
@@ -143,7 +164,11 @@ export default function PlayerPage() {
           <h1 className="player-page__reader-title">{book.title}</h1>
           <div className="player-page__divider" />
 
-          <div className="player-page__text">
+          {/* ✅ APPLY FONT SIZE HERE */}
+          <div
+            className="player-page__text"
+            style={{ fontSize: `${fontSize}px` }}
+          >
             {[book.summary, book.bookDescription, book.authorDescription]
               .filter(Boolean)
               .flatMap((text) => text.split("\n\n"))
@@ -161,7 +186,7 @@ export default function PlayerPage() {
           </div>
         </div>
 
-        {/* ✅ FINAL PLAYER BAR */}
+        {/* PLAYER BAR */}
         <div className="player-page__bottom-bar">
           <div className="player-page__bottom-left">
             <img
@@ -176,24 +201,15 @@ export default function PlayerPage() {
           </div>
 
           <div className="player-page__bottom-center">
-            <button
-              className="player-page__audio-skip-btn"
-              aria-label="Back 10 seconds"
-            >
+            <button className="player-page__audio-skip-btn">
               <MdReplay10 />
             </button>
 
-            <button
-              className="player-page__audio-play"
-              aria-label="Play"
-            >
+            <button className="player-page__audio-play">
               <FaPlay />
             </button>
 
-            <button
-              className="player-page__audio-skip-btn"
-              aria-label="Forward 10 seconds"
-            >
+            <button className="player-page__audio-skip-btn">
               <MdForward10 />
             </button>
           </div>

@@ -1882,3 +1882,9 @@ button:active {
   margin-top: auto;
   padding-bottom: 120px;
 }
+
+.player-page__text {
+  color: #032b41;
+  line-height: 1.65;
+  transition: font-size 0.2s ease;
+}
