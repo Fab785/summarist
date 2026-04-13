@@ -152,13 +152,22 @@ export default function PlayerPage() {
         <div className="player-page__reader">
           <h1 className="player-page__reader-title">{book.title}</h1>
           <div className="player-page__divider" />
-
           <div className="player-page__text">
-            <p>{book.summary}</p>
-            <p>{book.bookDescription}</p>
-            <p>{book.authorDescription}</p>
-            <p>{book.summary}</p>
-          </div>
+  {[book.summary, book.bookDescription, book.authorDescription]
+    .filter(Boolean)
+    .flatMap((text) => text.split("\n\n"))
+    .map((paragraph, index) => {
+      const isTitle = paragraph.startsWith("Part");
+
+      return isTitle ? (
+        <h3 key={index} className="player-page__section-title">
+          {paragraph}
+        </h3>
+      ) : (
+        <p key={index}>{paragraph}</p>
+      );
+    })}
+</div>
         </div>
 
         <div className="player-page__bottom-bar">
