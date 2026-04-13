@@ -5,7 +5,8 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { HiOutlineHome, HiOutlineBookmark } from "react-icons/hi";
 import { FiEdit3, FiSearch, FiSettings, FiHelpCircle, FiLogOut } from "react-icons/fi";
-import { FaPlay, FaUndoAlt, FaRedoAlt } from "react-icons/fa";
+import { FaPlay } from "react-icons/fa";
+import { MdReplay10, MdForward10 } from "react-icons/md";
 
 type Book = {
   id: string;
@@ -71,13 +72,8 @@ export default function PlayerPage() {
     }
   }, [id]);
 
-  if (loading) {
-    return <div className="player-loading">Loading...</div>;
-  }
-
-  if (!book) {
-    return <div className="player-loading">Book not found</div>;
-  }
+  if (loading) return <div className="player-loading">Loading...</div>;
+  if (!book) return <div className="player-loading">Book not found</div>;
 
   return (
     <div className="for-you-page">
@@ -87,28 +83,22 @@ export default function PlayerPage() {
         </div>
 
         <nav className="for-you__nav">
-          <Link
-            href="/for-you"
-            className="for-you__nav-link for-you__nav-link--clickable"
-          >
+          <Link href="/for-you" className="for-you__nav-link for-you__nav-link--clickable">
             <HiOutlineHome />
             <span>For you</span>
           </Link>
 
-          <Link
-            href="/my-library"
-            className="for-you__nav-link for-you__nav-link--clickable"
-          >
+          <Link href="/my-library" className="for-you__nav-link for-you__nav-link--clickable">
             <HiOutlineBookmark />
             <span>My Library</span>
           </Link>
 
-          <button className="for-you__nav-link for-you__nav-link--inactive" type="button">
+          <button className="for-you__nav-link for-you__nav-link--inactive">
             <FiEdit3 />
             <span>Highlights</span>
           </button>
 
-          <button className="for-you__nav-link for-you__nav-link--inactive" type="button">
+          <button className="for-you__nav-link for-you__nav-link--inactive">
             <FiSearch />
             <span>Search</span>
           </button>
@@ -122,17 +112,17 @@ export default function PlayerPage() {
         </div>
 
         <div className="for-you__sidebar-bottom">
-          <button className="for-you__nav-link for-you__nav-link--clickable" type="button">
+          <button className="for-you__nav-link">
             <FiSettings />
             <span>Settings</span>
           </button>
 
-          <button className="for-you__nav-link for-you__nav-link--inactive" type="button">
+          <button className="for-you__nav-link">
             <FiHelpCircle />
             <span>Help & Support</span>
           </button>
 
-          <button className="for-you__nav-link for-you__nav-link--clickable" type="button">
+          <button className="for-you__nav-link">
             <FiLogOut />
             <span>Logout</span>
           </button>
@@ -143,7 +133,7 @@ export default function PlayerPage() {
         <div className="for-you__topbar">
           <div className="for-you__search">
             <input type="text" placeholder="Search for books" />
-            <button type="button">
+            <button>
               <FiSearch />
             </button>
           </div>
@@ -152,24 +142,26 @@ export default function PlayerPage() {
         <div className="player-page__reader">
           <h1 className="player-page__reader-title">{book.title}</h1>
           <div className="player-page__divider" />
-          <div className="player-page__text">
-  {[book.summary, book.bookDescription, book.authorDescription]
-    .filter(Boolean)
-    .flatMap((text) => text.split("\n\n"))
-    .map((paragraph, index) => {
-      const isTitle = paragraph.startsWith("Part");
 
-      return isTitle ? (
-        <h3 key={index} className="player-page__section-title">
-          {paragraph}
-        </h3>
-      ) : (
-        <p key={index}>{paragraph}</p>
-      );
-    })}
-</div>
+          <div className="player-page__text">
+            {[book.summary, book.bookDescription, book.authorDescription]
+              .filter(Boolean)
+              .flatMap((text) => text.split("\n\n"))
+              .map((paragraph, index) => {
+                const isTitle = paragraph.startsWith("Part");
+
+                return isTitle ? (
+                  <h3 key={index} className="player-page__section-title">
+                    {paragraph}
+                  </h3>
+                ) : (
+                  <p key={index}>{paragraph}</p>
+                );
+              })}
+          </div>
         </div>
 
+        {/* ✅ FINAL PLAYER BAR */}
         <div className="player-page__bottom-bar">
           <div className="player-page__bottom-left">
             <img
@@ -184,16 +176,25 @@ export default function PlayerPage() {
           </div>
 
           <div className="player-page__bottom-center">
-            <button className="player-page__audio-btn" type="button">
-              <FaUndoAlt />
+            <button
+              className="player-page__audio-skip-btn"
+              aria-label="Back 10 seconds"
+            >
+              <MdReplay10 />
             </button>
 
-            <button className="player-page__audio-play" type="button">
+            <button
+              className="player-page__audio-play"
+              aria-label="Play"
+            >
               <FaPlay />
             </button>
 
-            <button className="player-page__audio-btn" type="button">
-              <FaRedoAlt />
+            <button
+              className="player-page__audio-skip-btn"
+              aria-label="Forward 10 seconds"
+            >
+              <MdForward10 />
             </button>
           </div>
 
