@@ -4,7 +4,13 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { HiOutlineHome, HiOutlineBookmark } from "react-icons/hi";
-import { FiEdit3, FiSearch, FiSettings, FiHelpCircle, FiLogOut } from "react-icons/fi";
+import {
+  FiEdit3,
+  FiSearch,
+  FiSettings,
+  FiHelpCircle,
+  FiLogOut,
+} from "react-icons/fi";
 import { FaStar, FaClock, FaBookOpen, FaMicrophone } from "react-icons/fa";
 
 type Book = {
@@ -32,6 +38,7 @@ export default function BookDetailsPage() {
 
   const [book, setBook] = useState<Book | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -70,6 +77,36 @@ export default function BookDetailsPage() {
       fetchBook();
     }
   }, [id]);
+
+  useEffect(() => {
+    if (!book) return;
+
+    const existingBooks = JSON.parse(localStorage.getItem("myLibrary") || "[]");
+    const alreadySaved = existingBooks.some(
+      (savedBook: Book) => String(savedBook.id) === String(book.id)
+    );
+
+    setIsSaved(alreadySaved);
+  }, [book]);
+
+  const handleSaveBook = () => {
+    if (!book) return;
+
+    const existingBooks = JSON.parse(localStorage.getItem("myLibrary") || "[]");
+
+    const alreadySaved = existingBooks.some(
+      (savedBook: Book) => String(savedBook.id) === String(book.id)
+    );
+
+    if (alreadySaved) {
+      setIsSaved(true);
+      return;
+    }
+
+    const updatedBooks = [...existingBooks, book];
+    localStorage.setItem("myLibrary", JSON.stringify(updatedBooks));
+    setIsSaved(true);
+  };
 
   const formatDuration = () => {
     return "03:24";
@@ -127,13 +164,13 @@ export default function BookDetailsPage() {
             <span>For you</span>
           </Link>
 
-          <button
+          <Link
+            href="/my-library"
             className="for-you__nav-link for-you__nav-link--clickable"
-            type="button"
           >
             <HiOutlineBookmark />
             <span>My Library</span>
-          </button>
+          </Link>
 
           <button
             className="for-you__nav-link for-you__nav-link--inactive"
@@ -237,20 +274,32 @@ export default function BookDetailsPage() {
               <div className="book-details__divider" />
 
               <div className="book-details__actions">
-                 <Link href={`/player/${book.id}`} className="book-details__action-btn">
-                   <FaBookOpen />
-                   <span>Read</span>
+                <Link
+                  href={`/player/${book.id}`}
+                  className="book-details__action-btn"
+                >
+                  <FaBookOpen />
+                  <span>Read</span>
                 </Link>
 
-                 <Link href={`/player/${book.id}`} className="book-details__action-btn">
-                     <FaMicrophone />
-                     <span>Listen</span>
-                  </Link>
+                <Link
+                  href={`/player/${book.id}`}
+                  className="book-details__action-btn"
+                >
+                  <FaMicrophone />
+                  <span>Listen</span>
+                </Link>
               </div>
 
-              <button className="book-details__library-link" type="button">
+              <button
+                className="book-details__library-link"
+                type="button"
+                onClick={handleSaveBook}
+              >
                 <HiOutlineBookmark />
-                <span>Add title to My Library</span>
+                <span>
+                  {isSaved ? "Saved in My Library" : "Add title to My Library"}
+                </span>
               </button>
             </div>
 

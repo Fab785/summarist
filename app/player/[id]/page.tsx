@@ -35,7 +35,7 @@ export default function PlayerPage() {
   const [loading, setLoading] = useState(true);
 
   // ✅ NEW: font size state
-  const [fontSize, setFontSize] = useState(17);
+  const [fontSize, setFontSize] = useState(16);
 
   useEffect(() => {
     const fetchBook = async () => {
