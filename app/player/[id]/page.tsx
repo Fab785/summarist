@@ -103,34 +103,38 @@ export default function PlayerPage() {
 
         {/* ✅ UPDATED FONT CONTROLS */}
         <div className="player-page__font-controls">
-          <button
-            className={`player-page__font-btn ${fontSize === 15 ? "player-page__font-btn--active" : ""}`}
-            onClick={() => setFontSize(15)}
-          >
-            Aa
-          </button>
+  <button
+    className={`player-page__font-btn ${fontSize === 16 ? "player-page__font-btn--active" : ""}`}
+    onClick={() => setFontSize(16)}
+    style={{ fontSize: "20px" }}
+  >
+    Aa
+  </button>
 
-          <button
-            className={`player-page__font-btn ${fontSize === 17 ? "player-page__font-btn--active" : ""}`}
-            onClick={() => setFontSize(17)}
-          >
-            Aa
-          </button>
+  <button
+    className={`player-page__font-btn ${fontSize === 18 ? "player-page__font-btn--active" : ""}`}
+    onClick={() => setFontSize(18)}
+    style={{ fontSize: "24px" }}
+  >
+    Aa
+  </button>
 
-          <button
-            className={`player-page__font-btn ${fontSize === 19 ? "player-page__font-btn--active" : ""}`}
-            onClick={() => setFontSize(19)}
-          >
-            Aa
-          </button>
+  <button
+    className={`player-page__font-btn ${fontSize === 22 ? "player-page__font-btn--active" : ""}`}
+    onClick={() => setFontSize(22)}
+    style={{ fontSize: "28px" }}
+  >
+    Aa
+  </button>
 
-          <button
-            className={`player-page__font-btn ${fontSize === 22 ? "player-page__font-btn--active" : ""}`}
-            onClick={() => setFontSize(22)}
-          >
-            Aa
-          </button>
-        </div>
+  <button
+    className={`player-page__font-btn ${fontSize === 26 ? "player-page__font-btn--active" : ""}`}
+    onClick={() => setFontSize(26)}
+    style={{ fontSize: "32px" }}
+  >
+    Aa
+  </button>
+</div>
 
         <div className="for-you__sidebar-bottom">
           <button className="for-you__nav-link">

@@ -1729,12 +1729,6 @@ button:active {
   margin-bottom: 32px;
 }
 
-.player-page__text {
-  color: #032b41;
-  font-size: 17px;
-  line-height: 1.65;
-}
-
 .player-page__text p {
   margin-bottom: 24px;
 }
@@ -1885,6 +1879,6 @@ button:active {
 
 .player-page__text {
   color: #032b41;
+  font-size: 17px;
   line-height: 1.65;
-  transition: font-size 0.2s ease;
 }
