@@ -91,18 +91,25 @@ export default function BookDetailsPage() {
 
   const handleSaveBook = () => {
     if (!book) return;
-
-    const existingBooks = JSON.parse(localStorage.getItem("myLibrary") || "[]");
-
-    const alreadySaved = existingBooks.some(
-      (savedBook: Book) => String(savedBook.id) === String(book.id)
+  
+    const existingBooks: Book[] = JSON.parse(
+      localStorage.getItem("myLibrary") || "[]"
     );
-
+  
+    const alreadySaved = existingBooks.some(
+      (savedBook) => String(savedBook.id) === String(book.id)
+    );
+  
     if (alreadySaved) {
-      setIsSaved(true);
+      const updatedBooks = existingBooks.filter(
+        (savedBook) => String(savedBook.id) !== String(book.id)
+      );
+  
+      localStorage.setItem("myLibrary", JSON.stringify(updatedBooks));
+      setIsSaved(false);
       return;
     }
-
+  
     const updatedBooks = [...existingBooks, book];
     localStorage.setItem("myLibrary", JSON.stringify(updatedBooks));
     setIsSaved(true);

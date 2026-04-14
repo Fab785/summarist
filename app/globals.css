@@ -1898,6 +1898,14 @@ button:active {
   padding: 44px 72px 60px;
 }
 
+.my-library__saved-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(184px, 184px));
+  gap: 30px 36px;
+  width: 100%;
+  align-items: start;
+}
+
 .my-library__section {
   margin-bottom: 72px;
 }
@@ -1941,8 +1949,8 @@ button:active {
 /* SAVED GRID */
 .my-library__saved-grid {
   display: grid;
-  grid-template-columns: 184px;
-  gap: 28px;
+  grid-template-columns: repeat(5, minmax(180px, 1fr));
+  gap: 30px 36px;
 }
 
 /* FINISHED GRID */
@@ -2020,7 +2028,7 @@ button:active {
   gap: 6px;
 }
 
-/* ADD TO LIBRARY BUTTON ON BOOK DETAILS PAGE */
+/* BOOK DETAILS SAVE BUTTON */
 .book-details__library-link {
   display: inline-flex;
   align-items: center;
@@ -2046,6 +2054,7 @@ button:active {
 
 /* RESPONSIVE */
 @media (max-width: 1400px) {
+  .my-library__saved-grid,
   .my-library__grid {
     grid-template-columns: repeat(4, minmax(180px, 1fr));
   }
@@ -2056,6 +2065,7 @@ button:active {
     padding: 32px 40px 48px;
   }
 
+  .my-library__saved-grid,
   .my-library__grid {
     grid-template-columns: repeat(3, minmax(180px, 1fr));
   }
@@ -2066,14 +2076,15 @@ button:active {
     padding: 24px;
   }
 
+  .my-library__saved-grid,
   .my-library__grid {
     grid-template-columns: repeat(2, minmax(180px, 1fr));
   }
 }
 
 @media (max-width: 640px) {
-  .my-library__grid,
-  .my-library__saved-grid {
+  .my-library__saved-grid,
+  .my-library__grid {
     grid-template-columns: 1fr;
   }
 
