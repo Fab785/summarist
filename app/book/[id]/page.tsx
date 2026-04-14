@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { HiOutlineHome, HiOutlineBookmark } from "react-icons/hi";
+import { HiOutlineHome, HiOutlineBookmark, HiBookmark } from "react-icons/hi";
 import {
   FiEdit3,
   FiSearch,
@@ -292,15 +292,16 @@ export default function BookDetailsPage() {
               </div>
 
               <button
-                className="book-details__library-link"
-                type="button"
-                onClick={handleSaveBook}
-              >
-                <HiOutlineBookmark />
-                <span>
-                  {isSaved ? "Saved in My Library" : "Add title to My Library"}
-                </span>
-              </button>
+  className="book-details__library-link"
+  type="button"
+  onClick={handleSaveBook}
+>
+  {isSaved ? <HiBookmark /> : <HiOutlineBookmark />}
+
+  <span>
+    {isSaved ? "Saved in My Library" : "Add title to My Library"}
+  </span>
+</button>
             </div>
 
             <div className="book-details__image-wrap">
