@@ -979,6 +979,8 @@ button:disabled {
 }
 
 .for-you__nav-link {
+  width: 100%;
+  border: none;
   position: relative;
   display: flex;
   align-items: center;
@@ -989,6 +991,11 @@ button:disabled {
   background: transparent;
   text-decoration: none;
   text-align: left;
+}
+
+.for-you__nav-link span {
+  white-space: nowrap;
+  line-height: 1.2;
 }
 
 .for-you__nav-link.active {
@@ -1043,6 +1050,8 @@ button:active {
 
 .for-you__main {
   flex: 1;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 .for-you__topbar {
@@ -1909,10 +1918,12 @@ button:active {
 
 .my-library {
   padding: 36px 56px 48px;
+  min-width: 0;
 }
 
 .my-library__section {
   margin-bottom: 56px;
+  min-width: 0;
 }
 
 .my-library__section-title {
@@ -2135,4 +2146,45 @@ button:active {
   100% {
     background-position: 0 0;
   }
+}
+
+/* CAROUSEL */
+
+.my-library__carousel {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 24px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  align-items: flex-start;
+  padding-bottom: 8px;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.my-library__carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.my-library__carousel.is-dragging {
+  cursor: grabbing;
+}
+
+.my-library__carousel .my-library__book-card {
+  flex: 0 0 184px;
+  min-width: 184px;
+}
+
+.my-library__book-card {
+  -webkit-user-drag: none;
+}
+
+.my-library__book-image {
+  pointer-events: none;
+  -webkit-user-drag: none;
 }

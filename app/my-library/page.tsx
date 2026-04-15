@@ -90,14 +90,16 @@ export default function MyLibraryPage() {
       const carousel = carouselRef.current;
       if (!carousel || !isPointerDownRef.current) return;
 
+      event.preventDefault();
+
       const dx = event.pageX - startXRef.current;
 
-      if (Math.abs(dx) > 5) {
+      if (Math.abs(dx) > 4) {
         hasDraggedRef.current = true;
         setIsDragging(true);
       }
 
-      carousel.scrollLeft = scrollLeftRef.current - dx;
+      carousel.scrollLeft = scrollLeftRef.current - dx * 1.6;
     };
 
     const handleMouseUp = () => {
@@ -119,8 +121,12 @@ export default function MyLibraryPage() {
   }, []);
 
   const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.button !== 0) return;
+
     const carousel = carouselRef.current;
     if (!carousel) return;
+
+    event.preventDefault();
 
     isPointerDownRef.current = true;
     hasDraggedRef.current = false;
@@ -160,6 +166,7 @@ export default function MyLibraryPage() {
           e.preventDefault();
         }
       }}
+      onDragStart={(e) => e.preventDefault()}
       draggable={false}
     >
       <div className="my-library__book-image-wrap">
@@ -319,6 +326,7 @@ export default function MyLibraryPage() {
               }`}
               onMouseDown={handleMouseDown}
               onWheel={handleWheel}
+              onDragStart={(e) => e.preventDefault()}
             >
               {isLoading
                 ? Array.from({ length: 13 }).map((_, index) =>
