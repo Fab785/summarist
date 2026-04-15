@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { HiOutlineHome, HiOutlineBookmark } from "react-icons/hi";
 import {
@@ -35,6 +35,13 @@ export default function MyLibraryPage() {
   const [savedBooks, setSavedBooks] = useState<Book[]>([]);
   const [finishedBooks, setFinishedBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const carouselRef = useRef<HTMLDivElement | null>(null);
+  const isPointerDownRef = useRef(false);
+  const hasDraggedRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
 
   useEffect(() => {
     const loadLibrary = async () => {
@@ -65,7 +72,7 @@ export default function MyLibraryPage() {
           (book: Book) => !savedIds.has(String(book.id))
         );
 
-        setFinishedBooks(finished.slice(0, 5));
+        setFinishedBooks(finished);
       } catch (error) {
         console.error("Error loading library:", error);
       } finally {
@@ -77,6 +84,59 @@ export default function MyLibraryPage() {
 
     loadLibrary();
   }, []);
+
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      const carousel = carouselRef.current;
+      if (!carousel || !isPointerDownRef.current) return;
+
+      const dx = event.pageX - startXRef.current;
+
+      if (Math.abs(dx) > 5) {
+        hasDraggedRef.current = true;
+        setIsDragging(true);
+      }
+
+      carousel.scrollLeft = scrollLeftRef.current - dx;
+    };
+
+    const handleMouseUp = () => {
+      isPointerDownRef.current = false;
+
+      setTimeout(() => {
+        setIsDragging(false);
+        hasDraggedRef.current = false;
+      }, 0);
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, []);
+
+  const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    isPointerDownRef.current = true;
+    hasDraggedRef.current = false;
+    startXRef.current = event.pageX;
+    scrollLeftRef.current = carousel.scrollLeft;
+  };
+
+  const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+      event.preventDefault();
+      carousel.scrollLeft += event.deltaY;
+    }
+  };
 
   const formatDuration = (bookId: string) => {
     const durations: Record<string, string> = {
@@ -95,6 +155,12 @@ export default function MyLibraryPage() {
       href={`/book/${book.id}`}
       className="my-library__book-card"
       key={book.id}
+      onClick={(e) => {
+        if (hasDraggedRef.current || isDragging) {
+          e.preventDefault();
+        }
+      }}
+      draggable={false}
     >
       <div className="my-library__book-image-wrap">
         <div className="my-library__book-image-bg" />
@@ -102,6 +168,7 @@ export default function MyLibraryPage() {
           src={book.imageLink}
           alt={book.title}
           className="my-library__book-image"
+          draggable={false}
         />
       </div>
 
@@ -245,9 +312,16 @@ export default function MyLibraryPage() {
                   }`}
             </p>
 
-            <div className="my-library__grid">
+            <div
+              ref={carouselRef}
+              className={`my-library__carousel ${
+                isDragging ? "is-dragging" : ""
+              }`}
+              onMouseDown={handleMouseDown}
+              onWheel={handleWheel}
+            >
               {isLoading
-                ? Array.from({ length: 5 }).map((_, index) =>
+                ? Array.from({ length: 13 }).map((_, index) =>
                     renderSkeletonCard(index + 100)
                   )
                 : finishedBooks.map(renderBookCard)}
