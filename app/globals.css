@@ -1112,6 +1112,19 @@ button:active {
   margin-bottom: 28px;
 }
 
+.for-you__book-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding: 16px 14px 14px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.for-you__book-card:hover {
+  background-color: #f1f3f2;
+}
+
 .for-you__selected-card {
   width: 100%;
   max-width: 730px;
@@ -1965,6 +1978,14 @@ button:active {
   display: block;
   text-decoration: none;
   color: inherit;
+
+  padding: 12px;              
+  border-radius: 8px;         
+  transition: all 0.2s ease;  
+}
+
+.my-library__book-card:hover {
+  background-color: #f1f3f2;  
 }
 
 .my-library__book-image-wrap {
@@ -2096,5 +2117,28 @@ button:active {
   .my-library__book-image-bg {
     width: 100%;
     max-width: 184px;
+  }
+}
+
+.my-library__skeleton-card {
+  width: 184px;
+  height: 260px;
+  border-radius: 8px;
+  background: linear-gradient(
+    90deg,
+    #f1f6f4 25%,
+    #e3ece8 37%,
+    #f1f6f4 63%
+  );
+  background-size: 400% 100%;
+  animation: skeleton-loading 1.4s ease infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
   }
 }

@@ -136,10 +136,13 @@ export default function ForYouPage() {
            <span>For you</span>
          </Link>
 
-         <button className="for-you__nav-link for-you__nav-link--clickable" type="button">
+         <Link
+  href="/my-library"
+  className="for-you__nav-link for-you__nav-link--clickable"
+>
   <HiOutlineBookmark />
   <span>My Library</span>
-</button>
+</Link>
 
 {/* INACTIVE */}
 <button

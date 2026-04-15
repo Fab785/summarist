@@ -34,12 +34,11 @@ type Book = {
 export default function MyLibraryPage() {
   const [savedBooks, setSavedBooks] = useState<Book[]>([]);
   const [finishedBooks, setFinishedBooks] = useState<Book[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadLibrary = async () => {
       try {
-        // IMPORTANT: same key as Player page
         const saved = JSON.parse(localStorage.getItem("myLibrary") || "[]");
         setSavedBooks(saved);
 
@@ -70,7 +69,9 @@ export default function MyLibraryPage() {
       } catch (error) {
         console.error("Error loading library:", error);
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 300);
       }
     };
 
@@ -91,7 +92,7 @@ export default function MyLibraryPage() {
 
   const renderBookCard = (book: Book) => (
     <Link
-      href={`/player/${book.id}`}
+      href={`/book/${book.id}`}
       className="my-library__book-card"
       key={book.id}
     >
@@ -122,9 +123,23 @@ export default function MyLibraryPage() {
     </Link>
   );
 
-  if (loading) {
-    return <div className="for-you-page">Loading...</div>;
-  }
+  const renderSkeletonCard = (key: number) => (
+    <div className="my-library__book-card" key={key}>
+      <div className="my-library__book-image-wrap">
+        <div className="my-library__skeleton-image-bg" />
+        <div className="my-library__skeleton-image" />
+      </div>
+
+      <div className="my-library__skeleton-title" />
+      <div className="my-library__skeleton-author" />
+      <div className="my-library__skeleton-subtitle" />
+
+      <div className="my-library__book-meta">
+        <div className="my-library__skeleton-meta" />
+        <div className="my-library__skeleton-meta" />
+      </div>
+    </div>
+  );
 
   return (
     <div className="for-you-page">
@@ -202,7 +217,13 @@ export default function MyLibraryPage() {
               {savedBooks.length} {savedBooks.length === 1 ? "item" : "items"}
             </p>
 
-            {savedBooks.length === 0 ? (
+            {isLoading ? (
+              <div className="my-library__saved-grid">
+                {Array.from({ length: 3 }).map((_, index) =>
+                  renderSkeletonCard(index)
+                )}
+              </div>
+            ) : savedBooks.length === 0 ? (
               <div className="my-library__empty-state">
                 <h3>Save your favorite books!</h3>
                 <p>When you save a book, it will appear here.</p>
@@ -217,12 +238,19 @@ export default function MyLibraryPage() {
           <section className="my-library__section">
             <h2 className="my-library__section-title">Finished</h2>
             <p className="my-library__section-count">
-              {finishedBooks.length}{" "}
-              {finishedBooks.length === 1 ? "item" : "items"}
+              {isLoading
+                ? "Loading..."
+                : `${finishedBooks.length} ${
+                    finishedBooks.length === 1 ? "item" : "items"
+                  }`}
             </p>
 
             <div className="my-library__grid">
-              {finishedBooks.map(renderBookCard)}
+              {isLoading
+                ? Array.from({ length: 5 }).map((_, index) =>
+                    renderSkeletonCard(index + 100)
+                  )
+                : finishedBooks.map(renderBookCard)}
             </div>
           </section>
         </div>
