@@ -74,8 +74,12 @@ export default function ForYouPage() {
         ).then((res) => res.json());
 
         setSelectedBook(Array.isArray(selected) ? selected[0] : selected);
-        setRecommendedBooks(Array.isArray(recommended) ? recommended.slice(0, 8) : []);
-        setSuggestedBooks(Array.isArray(suggested) ? suggested.slice(0, 7) : []);
+        setRecommendedBooks(
+          Array.isArray(recommended) ? recommended.slice(0, 8) : []
+        );
+        setSuggestedBooks(
+          Array.isArray(suggested) ? suggested.slice(0, 7) : []
+        );
       } catch (error) {
         console.error("Error fetching books:", error);
       }
@@ -200,7 +204,11 @@ export default function ForYouPage() {
         key={book.id}
         className="for-you__book-card"
         onClick={(e) => {
-          if (hasDraggedRef.current || isDraggingRecommended || isDraggingSuggested) {
+          if (
+            hasDraggedRef.current ||
+            isDraggingRecommended ||
+            isDraggingSuggested
+          ) {
             e.preventDefault();
           }
         }}
@@ -290,13 +298,13 @@ export default function ForYouPage() {
         </nav>
 
         <div className="for-you__sidebar-bottom">
-          <button
+          <Link
+            href="/settings"
             className="for-you__nav-link for-you__nav-link--clickable"
-            type="button"
           >
             <FiSettings />
             <span>Settings</span>
-          </button>
+          </Link>
 
           <button
             className="for-you__nav-link for-you__nav-link--inactive"
