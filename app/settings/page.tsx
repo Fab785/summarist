@@ -159,7 +159,7 @@ export default function SettingsPage() {
           ) : (
             <div className="settings-page__logged-out">
               <img
-                src="/assets/settings-login.png"
+                src="/assets/login.webp"
                 alt="Login to view settings"
                 className="settings-page__logged-out-image"
               />

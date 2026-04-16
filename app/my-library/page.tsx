@@ -218,9 +218,9 @@ export default function MyLibraryPage() {
   return (
     <div className="for-you-page">
       <aside className="for-you__sidebar">
-        <div className="for-you__logo">
-          <img src="/assets/logo.png" alt="Summarist" />
-        </div>
+      <div className="for-you__logo">
+  <img src="/assets/logo.png" alt="Summarist" />
+</div>
 
         <nav className="for-you__nav">
           <Link
@@ -257,14 +257,17 @@ export default function MyLibraryPage() {
         </nav>
 
         <div className="for-you__sidebar-bottom">
-          <button className="for-you__nav-link" type="button">
+          <Link
+            href="/settings"
+            className="for-you__nav-link for-you__nav-link--clickable"
+          >
             <FiSettings />
             <span>Settings</span>
-          </button>
+          </Link>
 
           <button className="for-you__nav-link" type="button">
             <FiHelpCircle />
-            <span>Help & Support</span>
+            <span>Help &amp; Support</span>
           </button>
 
           <button className="for-you__nav-link" type="button">
