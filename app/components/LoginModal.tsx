@@ -36,6 +36,8 @@ const LoginModal: FC<LoginModalProps> = ({ isOpen, onClose }) => {
     }
 
     localStorage.setItem("isLoggedIn", "true");
+localStorage.setItem("userEmail", "guest@gmail.com");
+localStorage.setItem("userPlan", "premium-plus");
     onClose();
     router.push("/for-you");
   };
