@@ -159,9 +159,10 @@ export default function SettingsPage() {
 
       {/* LOGIN MODAL */}
       <LoginModal
-        isOpen={isLoginModalOpen}
-        onClose={closeLoginModal}
-      />
+  isOpen={isLoginModalOpen}
+  onClose={closeLoginModal}
+  redirectTo="/settings"
+/>
     </div>
   );
 }

@@ -6,9 +6,14 @@ import { FaUser } from "react-icons/fa";
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
+  redirectTo?: string;
 }
 
-const LoginModal: FC<LoginModalProps> = ({ isOpen, onClose }) => {
+const LoginModal: FC<LoginModalProps> = ({
+  isOpen,
+  onClose,
+  redirectTo = "/for-you",
+}) => {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
@@ -16,6 +21,15 @@ const LoginModal: FC<LoginModalProps> = ({ isOpen, onClose }) => {
   const [error, setError] = useState("");
 
   if (!isOpen) return null;
+
+  const finishLogin = (emailValue: string) => {
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("userEmail", emailValue);
+    localStorage.setItem("userPlan", "premium-plus");
+
+    onClose();
+    router.push(redirectTo);
+  };
 
   const handleLogin = () => {
     setError("");
@@ -35,23 +49,21 @@ const LoginModal: FC<LoginModalProps> = ({ isOpen, onClose }) => {
       return;
     }
 
-    localStorage.setItem("isLoggedIn", "true");
-localStorage.setItem("userEmail", "guest@gmail.com");
-localStorage.setItem("userPlan", "premium-plus");
-    onClose();
-    router.push("/for-you");
+    finishLogin(email);
   };
 
   const handleGuestLogin = () => {
-    localStorage.setItem("isLoggedIn", "true");
-    onClose();
-    router.push("/for-you");
+    finishLogin("guest@gmail.com");
   };
 
   return (
     <div className="modal__overlay" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <button className="modal__close" onClick={onClose} aria-label="Close modal">
+        <button
+          className="modal__close"
+          onClick={onClose}
+          aria-label="Close modal"
+        >
           ×
         </button>
 
