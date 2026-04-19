@@ -974,9 +974,10 @@ button:disabled {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: auto;  
-  padding-top: 20px;
+  margin-top: auto;
+  padding: 20px 0 16px;
 }
+
 
 .for-you__nav-link {
   width: 100%;
@@ -1934,15 +1935,25 @@ button:active {
   border-radius: 999px;
 }
 
-.for-you__sidebar-bottom {
-  margin-top: auto;
-  padding-bottom: 120px;
-}
 
 .player-page__text {
   color: #032b41;
   font-size: 17px;
   line-height: 1.65;
+}
+
+/* PLAYER PAGE ONLY */
+.player-layout .for-you__sidebar {
+  padding-bottom: 110px;
+}
+
+.player-layout .for-you__sidebar-bottom {
+  padding-bottom: 110px;
+}
+
+/* optional: keep player content clear of the bottom bar */
+.player-page {
+  padding-bottom: 110px;
 }
 
 /* MY LIBRARY */

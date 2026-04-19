@@ -73,7 +73,7 @@ export default function PlayerPage() {
   if (!book) return <div className="player-loading">Book not found</div>;
 
   return (
-    <div className="for-you-page">
+    <div className="for-you-page player-layout">
       <aside className="for-you__sidebar">
         <div className="for-you__logo">
           <img src="/assets/logo.png" alt="Summarist" />
