@@ -1890,7 +1890,6 @@ button:active {
 }
 
 
-
 .player-page__audio-play {
   width: 40px;
   height: 40px;
@@ -1901,9 +1900,13 @@ button:active {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
+  font-size: 18px;
   cursor: pointer;
   flex-shrink: 0;
+}
+
+.player-page__audio-play svg {
+  transform: translateX(1px);
 }
 
 .player-page__bottom-right {
