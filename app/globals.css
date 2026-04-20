@@ -1930,14 +1930,29 @@ button:active {
   height: 4px;
   background: rgba(255, 255, 255, 0.35);
   border-radius: 999px;
-  overflow: hidden;
+  position: relative;
+  overflow: visible;
+  cursor: pointer;
 }
 
 .player-page__audio-progress-fill {
-  width: 18%;
   height: 100%;
   background: #ffffff;
   border-radius: 999px;
+  position: relative;
+  overflow: visible;
+}
+
+.player-page__audio-thumb {
+  position: absolute;
+  top: 50%;
+  right: -5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffffff;
+  transform: translateY(-50%);
+  z-index: 2;
 }
 
 
@@ -1956,7 +1971,6 @@ button:active {
   padding-bottom: 110px;
 }
 
-/* optional: keep player content clear of the bottom bar */
 .player-page {
   padding-bottom: 110px;
 }
