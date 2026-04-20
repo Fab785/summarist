@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { HiOutlineHome, HiOutlineBookmark, HiBookmark } from "react-icons/hi";
 import {
@@ -12,6 +12,7 @@ import {
   FiLogOut,
 } from "react-icons/fi";
 import { FaStar, FaClock, FaBookOpen, FaMicrophone } from "react-icons/fa";
+import LoginModal from "@/app/components/LoginModal";
 
 type Book = {
   id: string;
@@ -34,11 +35,19 @@ type Book = {
 
 export default function BookDetailsPage() {
   const params = useParams();
+  const router = useRouter();
   const id = params?.id as string;
 
   const [book, setBook] = useState<Book | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSaved, setIsSaved] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+  useEffect(() => {
+    const storedLogin = localStorage.getItem("isLoggedIn");
+    setIsLoggedIn(storedLogin === "true");
+  }, []);
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -89,30 +98,68 @@ export default function BookDetailsPage() {
     setIsSaved(alreadySaved);
   }, [book]);
 
+  const openLoginModal = () => {
+    setIsLoginModalOpen(true);
+  };
+
+  const closeLoginModal = () => {
+    setIsLoginModalOpen(false);
+
+    const storedLogin = localStorage.getItem("isLoggedIn");
+    setIsLoggedIn(storedLogin === "true");
+
+    if (book) {
+      const existingBooks = JSON.parse(localStorage.getItem("myLibrary") || "[]");
+      const alreadySaved = existingBooks.some(
+        (savedBook: Book) => String(savedBook.id) === String(book.id)
+      );
+      setIsSaved(alreadySaved);
+    }
+  };
+
+  const requireLogin = (action: () => void) => {
+    if (!isLoggedIn) {
+      openLoginModal();
+      return;
+    }
+
+    action();
+  };
+
   const handleSaveBook = () => {
     if (!book) return;
-  
+
     const existingBooks: Book[] = JSON.parse(
       localStorage.getItem("myLibrary") || "[]"
     );
-  
+
     const alreadySaved = existingBooks.some(
       (savedBook) => String(savedBook.id) === String(book.id)
     );
-  
+
     if (alreadySaved) {
       const updatedBooks = existingBooks.filter(
         (savedBook) => String(savedBook.id) !== String(book.id)
       );
-  
+
       localStorage.setItem("myLibrary", JSON.stringify(updatedBooks));
       setIsSaved(false);
       return;
     }
-  
+
     const updatedBooks = [...existingBooks, book];
     localStorage.setItem("myLibrary", JSON.stringify(updatedBooks));
     setIsSaved(true);
+  };
+
+  const handleProtectedSave = () => {
+    requireLogin(handleSaveBook);
+  };
+
+  const handleReadOrListen = () => {
+    requireLogin(() => {
+      router.push(`/player/${book?.id}`);
+    });
   };
 
   const formatDuration = () => {
@@ -205,13 +252,13 @@ export default function BookDetailsPage() {
         </nav>
 
         <div className="for-you__sidebar-bottom">
-          <button
+          <Link
+            href="/settings"
             className="for-you__nav-link for-you__nav-link--clickable"
-            type="button"
           >
             <FiSettings />
             <span>Settings</span>
-          </button>
+          </Link>
 
           <button
             className="for-you__nav-link for-you__nav-link--inactive"
@@ -226,12 +273,23 @@ export default function BookDetailsPage() {
           </button>
 
           <button
-            className="for-you__nav-link for-you__nav-link--clickable"
-            type="button"
-          >
-            <FiLogOut />
-            <span>Logout</span>
-          </button>
+  className="for-you__nav-link for-you__nav-link--clickable"
+  type="button"
+  onClick={() => {
+    if (isLoggedIn) {
+      localStorage.setItem("isLoggedIn", "false");
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("userPlan");
+      setIsLoggedIn(false);
+      setIsSaved(false);
+    } else {
+      openLoginModal();
+    }
+  }}
+>
+  <FiLogOut />
+  <span>{isLoggedIn ? "Logout" : "Login"}</span>
+</button>
         </div>
       </aside>
 
@@ -281,34 +339,35 @@ export default function BookDetailsPage() {
               <div className="book-details__divider" />
 
               <div className="book-details__actions">
-                <Link
-                  href={`/player/${book.id}`}
+                <button
+                  type="button"
                   className="book-details__action-btn"
+                  onClick={handleReadOrListen}
                 >
                   <FaBookOpen />
                   <span>Read</span>
-                </Link>
+                </button>
 
-                <Link
-                  href={`/player/${book.id}`}
+                <button
+                  type="button"
                   className="book-details__action-btn"
+                  onClick={handleReadOrListen}
                 >
                   <FaMicrophone />
                   <span>Listen</span>
-                </Link>
+                </button>
               </div>
 
               <button
-  className="book-details__library-link"
-  type="button"
-  onClick={handleSaveBook}
->
-  {isSaved ? <HiBookmark /> : <HiOutlineBookmark />}
-
-  <span>
-    {isSaved ? "Saved in My Library" : "Add title to My Library"}
-  </span>
-</button>
+                className="book-details__library-link"
+                type="button"
+                onClick={handleProtectedSave}
+              >
+                {isSaved ? <HiBookmark /> : <HiOutlineBookmark />}
+                <span>
+                  {isSaved ? "Saved in My Library" : "Add title to My Library"}
+                </span>
+              </button>
             </div>
 
             <div className="book-details__image-wrap">
@@ -341,6 +400,8 @@ export default function BookDetailsPage() {
           </section>
         </div>
       </main>
+
+      <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />
     </div>
   );
 }
