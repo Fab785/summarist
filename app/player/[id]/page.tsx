@@ -212,101 +212,103 @@ export default function PlayerPage() {
   return (
     <div className="for-you-page player-layout">
       <aside className="for-you__sidebar">
-        <div className="for-you__logo">
-          <img src="/assets/logo.png" alt="Summarist" />
-        </div>
+  <div className="player-page__sidebar-top">
+    <div className="for-you__logo">
+      <img src="/assets/logo.png" alt="Summarist" />
+    </div>
 
-        <nav className="for-you__nav">
-          <Link
-            href="/for-you"
-            className="for-you__nav-link for-you__nav-link--clickable"
-          >
-            <HiOutlineHome />
-            <span>For you</span>
-          </Link>
+    <nav className="for-you__nav">
+      <Link
+        href="/for-you"
+        className="for-you__nav-link for-you__nav-link--clickable"
+      >
+        <HiOutlineHome />
+        <span>For you</span>
+      </Link>
 
-          <Link
-            href="/my-library"
-            className="for-you__nav-link for-you__nav-link--clickable"
-          >
-            <HiOutlineBookmark />
-            <span>My Library</span>
-          </Link>
+      <Link
+        href="/my-library"
+        className="for-you__nav-link for-you__nav-link--clickable"
+      >
+        <HiOutlineBookmark />
+        <span>My Library</span>
+      </Link>
 
-          <button className="for-you__nav-link for-you__nav-link--inactive">
-            <FiEdit3 />
-            <span>Highlights</span>
-          </button>
+      <button className="for-you__nav-link for-you__nav-link--inactive">
+        <FiEdit3 />
+        <span>Highlights</span>
+      </button>
 
-          <button className="for-you__nav-link for-you__nav-link--inactive">
-            <FiSearch />
-            <span>Search</span>
-          </button>
-        </nav>
+      <button className="for-you__nav-link for-you__nav-link--inactive">
+        <FiSearch />
+        <span>Search</span>
+      </button>
+    </nav>
 
-        <div className="player-page__font-controls">
-          <button
-            className={`player-page__font-btn ${
-              fontSize === 16 ? "player-page__font-btn--active" : ""
-            }`}
-            onClick={() => setFontSize(16)}
-            style={{ fontSize: "20px" }}
-            type="button"
-          >
-            Aa
-          </button>
+    <div className="player-page__font-controls">
+      <button
+        className={`player-page__font-btn ${
+          fontSize === 16 ? "player-page__font-btn--active" : ""
+        }`}
+        onClick={() => setFontSize(16)}
+        style={{ fontSize: "20px" }}
+        type="button"
+      >
+        Aa
+      </button>
 
-          <button
-            className={`player-page__font-btn ${
-              fontSize === 18 ? "player-page__font-btn--active" : ""
-            }`}
-            onClick={() => setFontSize(18)}
-            style={{ fontSize: "24px" }}
-            type="button"
-          >
-            Aa
-          </button>
+      <button
+        className={`player-page__font-btn ${
+          fontSize === 18 ? "player-page__font-btn--active" : ""
+        }`}
+        onClick={() => setFontSize(18)}
+        style={{ fontSize: "24px" }}
+        type="button"
+      >
+        Aa
+      </button>
 
-          <button
-            className={`player-page__font-btn ${
-              fontSize === 22 ? "player-page__font-btn--active" : ""
-            }`}
-            onClick={() => setFontSize(22)}
-            style={{ fontSize: "28px" }}
-            type="button"
-          >
-            Aa
-          </button>
+      <button
+        className={`player-page__font-btn ${
+          fontSize === 22 ? "player-page__font-btn--active" : ""
+        }`}
+        onClick={() => setFontSize(22)}
+        style={{ fontSize: "28px" }}
+        type="button"
+      >
+        Aa
+      </button>
 
-          <button
-            className={`player-page__font-btn ${
-              fontSize === 26 ? "player-page__font-btn--active" : ""
-            }`}
-            onClick={() => setFontSize(26)}
-            style={{ fontSize: "32px" }}
-            type="button"
-          >
-            Aa
-          </button>
-        </div>
+      <button
+        className={`player-page__font-btn ${
+          fontSize === 26 ? "player-page__font-btn--active" : ""
+        }`}
+        onClick={() => setFontSize(26)}
+        style={{ fontSize: "32px" }}
+        type="button"
+      >
+        Aa
+      </button>
+    </div>
+  </div>
 
-        <div className="for-you__sidebar-bottom">
-          <button className="for-you__nav-link">
-            <FiSettings />
-            <span>Settings</span>
-          </button>
+  <div className="for-you__sidebar-bottom">
+    <button className="for-you__nav-link">
+      <FiSettings />
+      <span>Settings</span>
+    </button>
 
-          <button className="for-you__nav-link">
-            <FiHelpCircle />
-            <span>Help &amp; Support</span>
-          </button>
+    <button className="for-you__nav-link">
+      <FiHelpCircle />
+      <span>Help &amp; Support</span>
+    </button>
 
-          <button className="for-you__nav-link">
-            <FiLogOut />
-            <span>Logout</span>
-          </button>
-        </div>
-      </aside>
+    <button className="for-you__nav-link">
+      <FiLogOut />
+      <span>Logout</span>
+    </button>
+  </div>
+</aside>
 
       <main className="for-you__main player-page">
         <div className="for-you__topbar">

@@ -947,10 +947,23 @@ button:disabled {
   top: 0;
   background: #f7faf9;
   border-right: 1px solid #e1e7e4;
-
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   padding: 12px 0 16px;
+}
+
+.player-page__sidebar-top {
+  display: flex;
+  flex-direction: column;
+}
+
+.for-you__sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+  padding: 20px 0 16px;
 }
 
 .for-you__logo {
@@ -969,15 +982,6 @@ button:disabled {
   gap: 8px;
   margin-top: 32px; 
 }
-
-.for-you__sidebar-bottom {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: auto;
-  padding: 20px 0 16px;
-}
-
 
 .for-you__nav-link {
   width: 100%;
@@ -1806,9 +1810,9 @@ button:active {
 .player-page__font-controls {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 18px 24px 0;
-  margin-top: 18px;
+  gap: 12px;
+  padding: 0 24px;
+  margin-top: 28px;
 }
 
 .player-page__font-btn {
@@ -1967,9 +1971,6 @@ button:active {
   padding-bottom: 110px;
 }
 
-.player-layout .for-you__sidebar-bottom {
-  padding-bottom: 110px;
-}
 
 .player-page {
   padding-bottom: 110px;
