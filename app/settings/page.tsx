@@ -11,7 +11,7 @@ import {
   FiLogOut,
 } from "react-icons/fi";
 import { FaSearch } from "react-icons/fa";
-import LoginModal from "../components/LoginModal";
+import LoginModal from "@/app/components/LoginModal";
 
 export default function SettingsPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
