@@ -414,4 +414,4 @@ export default function PlayerPage() {
       </main>
     </div>
   );
-}1
+}

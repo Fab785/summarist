@@ -1,7 +1,9 @@
 "use client";
 
-import { HiOutlineHome, HiOutlineBookmark } from "react-icons/hi";
-import LoginModal from "@/app/components/LoginModal";
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import { HiOutlineHome, HiOutlineBookmark, HiBookmark } from "react-icons/hi";
 import {
   FiEdit3,
   FiSearch,
@@ -9,9 +11,8 @@ import {
   FiHelpCircle,
   FiLogOut,
 } from "react-icons/fi";
-import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { FaSearch, FaClock, FaStar, FaPlay } from "react-icons/fa";
+import { FaStar, FaClock, FaBookOpen, FaMicrophone } from "react-icons/fa";
+import LoginModal from "@/app/components/LoginModal";
 
 type Book = {
   id: string;
@@ -32,221 +33,220 @@ type Book = {
   authorDescription: string;
 };
 
-export default function ForYouPage() {
-  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
-  const [recommendedBooks, setRecommendedBooks] = useState<Book[]>([]);
-  const [suggestedBooks, setSuggestedBooks] = useState<Book[]>([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+export default function BookDetailsPage() {
+  const params = useParams();
+  const router = useRouter();
+  const id = params?.id as string;
+
+  const [book, setBook] = useState<Book | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-
-  const [isDraggingRecommended, setIsDraggingRecommended] = useState(false);
-  const [isDraggingSuggested, setIsDraggingSuggested] = useState(false);
-
-  const recommendedCarouselRef = useRef<HTMLDivElement | null>(null);
-  const suggestedCarouselRef = useRef<HTMLDivElement | null>(null);
-
-  const isPointerDownRef = useRef(false);
-  const activeCarouselRef = useRef<"recommended" | "suggested" | null>(null);
-  const hasDraggedRef = useRef(false);
-  const startXRef = useRef(0);
-  const scrollLeftRef = useRef(0);
 
   useEffect(() => {
     const syncLoginState = () => {
       const storedLogin = localStorage.getItem("isLoggedIn");
-      setIsLoggedIn(storedLogin !== "false");
+      setIsLoggedIn(storedLogin === "true");
     };
 
     syncLoginState();
-
-    const fetchBooks = async () => {
-      try {
-        const selected = await fetch(
-          "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=selected"
-        ).then((res) => res.json());
-
-        const recommended = await fetch(
-          "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=recommended"
-        ).then((res) => res.json());
-
-        const suggested = await fetch(
-          "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=suggested"
-        ).then((res) => res.json());
-
-        setSelectedBook(Array.isArray(selected) ? selected[0] : selected);
-        setRecommendedBooks(
-          Array.isArray(recommended) ? recommended.slice(0, 8) : []
-        );
-        setSuggestedBooks(
-          Array.isArray(suggested) ? suggested.slice(0, 7) : []
-        );
-      } catch (error) {
-        console.error("Error fetching books:", error);
-      }
-    };
-
-    fetchBooks();
-
     window.addEventListener("storage", syncLoginState);
-    return () => window.removeEventListener("storage", syncLoginState);
+
+    return () => {
+      window.removeEventListener("storage", syncLoginState);
+    };
   }, []);
 
   useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      if (!isPointerDownRef.current || !activeCarouselRef.current) return;
+    const fetchBook = async () => {
+      try {
+        const [selected, recommended, suggested] = await Promise.all([
+          fetch(
+            "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=selected"
+          ).then((res) => res.json()),
+          fetch(
+            "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=recommended"
+          ).then((res) => res.json()),
+          fetch(
+            "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=suggested"
+          ).then((res) => res.json()),
+        ]);
 
-      const carousel =
-        activeCarouselRef.current === "recommended"
-          ? recommendedCarouselRef.current
-          : suggestedCarouselRef.current;
+        const allBooks = [
+          ...(Array.isArray(selected) ? selected : [selected]),
+          ...(Array.isArray(recommended) ? recommended : []),
+          ...(Array.isArray(suggested) ? suggested : []),
+        ];
 
-      if (!carousel) return;
+        const matchedBook =
+          allBooks.find((item: Book) => String(item.id) === String(id)) || null;
 
-      event.preventDefault();
-
-      const dx = event.pageX - startXRef.current;
-
-      if (Math.abs(dx) > 4) {
-        hasDraggedRef.current = true;
-
-        if (activeCarouselRef.current === "recommended") {
-          setIsDraggingRecommended(true);
-        } else {
-          setIsDraggingSuggested(true);
-        }
+        setBook(matchedBook);
+      } catch (error) {
+        console.error("Error fetching book:", error);
+        setBook(null);
+      } finally {
+        setLoading(false);
       }
-
-      carousel.scrollLeft = scrollLeftRef.current - dx * 1.6;
     };
 
-    const handleMouseUp = () => {
-      isPointerDownRef.current = false;
-      activeCarouselRef.current = null;
-
-      setTimeout(() => {
-        setIsDraggingRecommended(false);
-        setIsDraggingSuggested(false);
-        hasDraggedRef.current = false;
-      }, 0);
-    };
-
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, []);
-
-  const handleCarouselMouseDown = (
-    event: React.MouseEvent<HTMLDivElement>,
-    type: "recommended" | "suggested"
-  ) => {
-    if (event.button !== 0) return;
-
-    const carousel =
-      type === "recommended"
-        ? recommendedCarouselRef.current
-        : suggestedCarouselRef.current;
-
-    if (!carousel) return;
-
-    event.preventDefault();
-
-    isPointerDownRef.current = true;
-    activeCarouselRef.current = type;
-    hasDraggedRef.current = false;
-    startXRef.current = event.pageX;
-    scrollLeftRef.current = carousel.scrollLeft;
-  };
-
-  const handleCarouselWheel = (
-    event: React.WheelEvent<HTMLDivElement>,
-    type: "recommended" | "suggested"
-  ) => {
-    const carousel =
-      type === "recommended"
-        ? recommendedCarouselRef.current
-        : suggestedCarouselRef.current;
-
-    if (!carousel) return;
-
-    if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
-      event.preventDefault();
-      carousel.scrollLeft += event.deltaY;
+    if (id) {
+      fetchBook();
     }
-  };
+  }, [id]);
 
-  const handleLogout = () => {
-    localStorage.setItem("isLoggedIn", "false");
-    setIsLoggedIn(false);
-  };
+  useEffect(() => {
+    if (!book) return;
 
-  const handleLoginClick = () => {
+    const existingBooks: Book[] = JSON.parse(
+      localStorage.getItem("myLibrary") || "[]"
+    );
+
+    const alreadySaved = existingBooks.some(
+      (savedBook) => String(savedBook.id) === String(book.id)
+    );
+
+    setIsSaved(alreadySaved);
+  }, [book, isLoggedIn]);
+
+  const openLoginModal = () => {
     setIsLoginModalOpen(true);
   };
 
-  const handleLoginModalClose = () => {
+  const closeLoginModal = () => {
     setIsLoginModalOpen(false);
+
     const storedLogin = localStorage.getItem("isLoggedIn");
-    setIsLoggedIn(storedLogin !== "false");
+    setIsLoggedIn(storedLogin === "true");
+
+    if (book) {
+      const existingBooks: Book[] = JSON.parse(
+        localStorage.getItem("myLibrary") || "[]"
+      );
+
+      const alreadySaved = existingBooks.some(
+        (savedBook) => String(savedBook.id) === String(book.id)
+      );
+
+      setIsSaved(alreadySaved);
+    }
   };
 
-  const formatDuration = () => {
-    return "00:00";
+  const requireLogin = (action: () => void) => {
+    if (!isLoggedIn) {
+      openLoginModal();
+      return;
+    }
+
+    action();
   };
 
-  const renderBookCard = (book: Book) => {
-    return (
-      <Link
-        href={`/book/${book.id}`}
-        key={book.id}
-        className="for-you__book-card"
-        onClick={(e) => {
-          if (
-            hasDraggedRef.current ||
-            isDraggingRecommended ||
-            isDraggingSuggested
-          ) {
-            e.preventDefault();
-          }
-        }}
-        onDragStart={(e) => e.preventDefault()}
-        draggable={false}
-      >
-        <div className="for-you__book-image-wrapper">
-          {!isLoggedIn && book.subscriptionRequired && (
-            <span className="for-you__premium-pill">Premium</span>
-          )}
+  const handleSaveBook = () => {
+    if (!book) return;
 
-          <div className="for-you__book-image-bg" />
-
-          <img
-            src={book.imageLink}
-            alt={book.title}
-            className="for-you__book-image"
-            draggable={false}
-          />
-        </div>
-
-        <h3 className="for-you__book-title">{book.title}</h3>
-        <p className="for-you__book-author">{book.author}</p>
-        <p className="for-you__book-subtitle">{book.subTitle}</p>
-
-        <div className="for-you__book-meta">
-          <span className="for-you__book-meta-item">
-            <FaClock />
-            {formatDuration()}
-          </span>
-          <span className="for-you__book-meta-item">
-            <FaStar />
-            {book.averageRating}
-          </span>
-        </div>
-      </Link>
+    const existingBooks: Book[] = JSON.parse(
+      localStorage.getItem("myLibrary") || "[]"
     );
+
+    const alreadySaved = existingBooks.some(
+      (savedBook) => String(savedBook.id) === String(book.id)
+    );
+
+    if (alreadySaved) {
+      const updatedBooks = existingBooks.filter(
+        (savedBook) => String(savedBook.id) !== String(book.id)
+      );
+
+      localStorage.setItem("myLibrary", JSON.stringify(updatedBooks));
+      setIsSaved(false);
+      return;
+    }
+
+    const updatedBooks = [...existingBooks, book];
+    localStorage.setItem("myLibrary", JSON.stringify(updatedBooks));
+    setIsSaved(true);
   };
+
+  const handleProtectedSave = () => {
+    requireLogin(handleSaveBook);
+  };
+
+  const handleReadOrListen = () => {
+    requireLogin(() => {
+      if (!book) return;
+      router.push(`/player/${book.id}`);
+    });
+  };
+
+  const handleLogoutOrLogin = () => {
+    if (isLoggedIn) {
+      localStorage.setItem("isLoggedIn", "false");
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("userPlan");
+      setIsLoggedIn(false);
+      setIsSaved(false);
+    } else {
+      openLoginModal();
+    }
+  };
+
+  const formatDuration = (audioLink?: string) => {
+    if (!audioLink || typeof audioLink !== "string") return "03:24";
+
+    const cleaned = audioLink.trim();
+
+    if (/^\d{1,2}:\d{2}$/.test(cleaned)) {
+      const [mins, secs] = cleaned.split(":");
+      return `${mins.padStart(2, "0")}:${secs}`;
+    }
+
+    if (/^\d+$/.test(cleaned)) {
+      const totalSeconds = Number(cleaned);
+      const mins = Math.floor(totalSeconds / 60);
+      const secs = totalSeconds % 60;
+      return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+    }
+
+    return "03:24";
+  };
+
+  if (loading) {
+    return (
+      <div className="for-you-page">
+        <aside className="for-you__sidebar">
+          <div className="for-you__logo">
+            <img src="/assets/logo.png" alt="Summarist" />
+          </div>
+        </aside>
+
+        <main className="for-you__main">
+          <div className="book-details__content">Loading...</div>
+        </main>
+      </div>
+    );
+  }
+
+  if (!book) {
+    return (
+      <div className="for-you-page">
+        <aside className="for-you__sidebar">
+          <div className="for-you__logo">
+            <img src="/assets/logo.png" alt="Summarist" />
+          </div>
+        </aside>
+
+        <main className="for-you__main">
+          <div className="book-details__content">
+            <Link href="/for-you" className="book-details__back">
+              ← Back
+            </Link>
+            <h1 className="book-details__not-found">Book not found</h1>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="for-you-page">
@@ -258,7 +258,7 @@ export default function ForYouPage() {
         <nav className="for-you__nav">
           <Link
             href="/for-you"
-            className="for-you__nav-link for-you__nav-link--clickable active"
+            className="for-you__nav-link for-you__nav-link--clickable"
           >
             <HiOutlineHome />
             <span>For you</span>
@@ -318,25 +318,14 @@ export default function ForYouPage() {
             <span>Help &amp; Support</span>
           </button>
 
-          {isLoggedIn ? (
-            <button
-              className="for-you__nav-link for-you__nav-link--clickable"
-              type="button"
-              onClick={handleLogout}
-            >
-              <FiLogOut />
-              <span>Logout</span>
-            </button>
-          ) : (
-            <button
-              className="for-you__nav-link for-you__nav-link--clickable"
-              type="button"
-              onClick={handleLoginClick}
-            >
-              <FiLogOut />
-              <span>Login</span>
-            </button>
-          )}
+          <button
+            className="for-you__nav-link for-you__nav-link--clickable"
+            type="button"
+            onClick={handleLogoutOrLogin}
+          >
+            <FiLogOut />
+            <span>{isLoggedIn ? "Logout" : "Login"}</span>
+          </button>
         </div>
       </aside>
 
@@ -345,95 +334,112 @@ export default function ForYouPage() {
           <div className="for-you__search">
             <input type="text" placeholder="Search for books" />
             <button type="button">
-              <FaSearch />
+              <FiSearch />
             </button>
           </div>
         </div>
 
-        <div className="for-you__content">
-          <section className="for-you__section">
-            <h2 className="for-you__section-title">Selected just for you</h2>
+        <div className="book-details__content">
+          <div className="book-details__hero">
+            <div className="book-details__info">
+              <h1 className="book-details__title">{book.title}</h1>
 
-            {selectedBook && (
-              <Link
-                href={`/book/${selectedBook.id}`}
-                className="for-you__selected-card"
+              <p className="book-details__author book-details__author--bold">
+                {book.author}
+              </p>
+
+              <p className="book-details__subtitle">{book.subTitle}</p>
+
+              <div className="book-details__divider" />
+
+              <div className="book-details__stats">
+                <div className="book-details__stat">
+                  <FaStar />
+                  <span>{book.averageRating} (608 ratings)</span>
+                </div>
+
+                <div className="book-details__stat">
+                  <FaClock />
+                  <span>{formatDuration(book.audioLink)}</span>
+                </div>
+
+                <div className="book-details__stat">
+                  <FaMicrophone />
+                  <span>Audio &amp; Text</span>
+                </div>
+
+                <div className="book-details__stat">
+                  <span>💡</span>
+                  <span>{book.keyIdeas} Key ideas</span>
+                </div>
+              </div>
+
+              <div className="book-details__divider" />
+
+              <div className="book-details__actions">
+                <button
+                  type="button"
+                  className="book-details__action-btn"
+                  onClick={handleReadOrListen}
+                >
+                  <FaBookOpen />
+                  <span>Read</span>
+                </button>
+
+                <button
+                  type="button"
+                  className="book-details__action-btn"
+                  onClick={handleReadOrListen}
+                >
+                  <FaMicrophone />
+                  <span>Listen</span>
+                </button>
+              </div>
+
+              <button
+                className="book-details__library-link"
+                type="button"
+                onClick={handleProtectedSave}
               >
-                <div className="for-you__selected-left">
-                  <p className="for-you__selected-subtitle">
-                    {selectedBook.subTitle}
-                  </p>
-                </div>
+                {isSaved ? <HiBookmark /> : <HiOutlineBookmark />}
+                <span>
+                  {isSaved ? "Saved in My Library" : "Add title to My Library"}
+                </span>
+              </button>
+            </div>
 
-                <div className="for-you__selected-divider" />
+            <div className="book-details__image-wrap">
+              <div className="book-details__image-bg" />
+              <img
+                src={book.imageLink}
+                alt={book.title}
+                className="book-details__image"
+              />
+            </div>
+          </div>
 
-                <div className="for-you__selected-center">
-                  <div className="for-you__selected-image-bg" />
-                  <img
-                    src={selectedBook.imageLink}
-                    alt={selectedBook.title}
-                    className="for-you__selected-image"
-                  />
-                </div>
+          <section className="book-details__section">
+            <h2 className="book-details__section-title">What&apos;s it about?</h2>
 
-                <div className="for-you__selected-right">
-                  <h3 className="for-you__selected-title">
-                    {selectedBook.title}
-                  </h3>
-                  <p className="for-you__selected-author">
-                    {selectedBook.author}
-                  </p>
+            <div className="book-details__tags">
+              {book.tags?.slice(0, 2).map((tag) => (
+                <span key={tag} className="book-details__tag">
+                  {tag}
+                </span>
+              ))}
+            </div>
 
-                  <div className="for-you__selected-audio">
-                    <div className="for-you__selected-play">
-                      <FaPlay />
-                    </div>
-                    <span>{formatDuration()}</span>
-                  </div>
-                </div>
-              </Link>
-            )}
+            <p className="book-details__text">{book.bookDescription}</p>
           </section>
 
-          <section className="for-you__section">
-            <h2 className="for-you__section-title">Recommended For You</h2>
-            <p className="for-you__section-subtitle">
-              We think you&apos;ll like these
-            </p>
-
-            <div
-              ref={recommendedCarouselRef}
-              className={`for-you__books-row ${
-                isDraggingRecommended ? "is-dragging" : ""
-              }`}
-              onMouseDown={(e) => handleCarouselMouseDown(e, "recommended")}
-              onWheel={(e) => handleCarouselWheel(e, "recommended")}
-              onDragStart={(e) => e.preventDefault()}
-            >
-              {recommendedBooks.map(renderBookCard)}
-            </div>
-          </section>
-
-          <section className="for-you__section">
-            <h2 className="for-you__section-title">Suggested Books</h2>
-            <p className="for-you__section-subtitle">Browse more great reads</p>
-
-            <div
-              ref={suggestedCarouselRef}
-              className={`for-you__books-row ${
-                isDraggingSuggested ? "is-dragging" : ""
-              }`}
-              onMouseDown={(e) => handleCarouselMouseDown(e, "suggested")}
-              onWheel={(e) => handleCarouselWheel(e, "suggested")}
-              onDragStart={(e) => e.preventDefault()}
-            >
-              {suggestedBooks.map(renderBookCard)}
-            </div>
+          <section className="book-details__section">
+            <h2 className="book-details__section-title">About the author</h2>
+            <p className="book-details__text">{book.authorDescription}</p>
           </section>
         </div>
       </main>
 
-      <LoginModal isOpen={isLoginModalOpen} onClose={handleLoginModalClose} />
+      <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />
     </div>
   );
 }

@@ -1161,22 +1161,6 @@ button:active {
   z-index: 1;
 }
 
-.for-you__selected-right {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.for-you__selected-title {
-  color: #032b41;
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.for-you__selected-author {
-  color: #394547;
-  font-size: 18px;
-}
 
 .for-you__selected-divider {
   width: 1px;
@@ -1210,25 +1194,6 @@ button:active {
   z-index: 1;
 }
 
-.for-you__selected-right {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.for-you__selected-title {
-  font-size: 20px;
-  line-height: 1.2;
-  font-weight: 700;
-  color: #032b41;
-  margin: 0 0 8px;
-}
-
-.for-you__selected-author {
-  font-size: 14px;
-  color: #49545a;
-  margin: 0 0 16px;
-}
 
 .for-you__selected-audio {
   display: flex;
@@ -1339,11 +1304,10 @@ button:active {
   display: grid;
   grid-template-columns: 1.1fr 1px 180px 1fr;
   align-items: center;
-  column-gap: 24px;
+  column-gap: 16px;
   text-decoration: none;
   color: inherit;
 }
-
 
 
 .for-you__selected-divider {
@@ -1374,28 +1338,12 @@ button:active {
   z-index: 1;
 }
 
-.for-you__selected-right {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.for-you__selected-title {
-  color: #032b41;
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.for-you__selected-author {
-  color: #394547;
-  font-size: 18px;
-}
-
 .for-you__selected-left {
+  width: 235px;
+  min-width: 235px;
   display: flex;
   align-items: flex-start;
-  min-height: 140px;
-  padding-top: 8px;
+  padding-top: 6px;
 }
 
 .for-you__selected-subtitle {
@@ -1404,6 +1352,7 @@ button:active {
   color: #032b41;
   margin: 0;
   max-width: 290px;
+  padding-bottom: 60px;
 }
 
 .for-you__selected-divider {
@@ -1442,22 +1391,21 @@ button:active {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 6px; 
 }
-
 .for-you__selected-title {
-  font-size: 20px;
+  font-size: 16px;
   line-height: 1.2;
   font-weight: 700;
   color: #032b41;
-  margin: 0 0 8px;
+  margin: 0;
 }
 
 .for-you__selected-author {
   font-size: 14px;
   color: #49545a;
-  margin: 0 0 16px;
+  margin: 0;
 }
-
 .for-you__selected-audio {
   display: flex;
   align-items: center;
