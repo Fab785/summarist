@@ -200,35 +200,35 @@ export default function ForYouPage() {
   const renderBookCard = (book: Book) => {
     return (
       <Link
-        href={`/book/${book.id}`}
-        key={book.id}
-        className="for-you__book-card"
-        onClick={(e) => {
-          if (
-            hasDraggedRef.current ||
-            isDraggingRecommended ||
-            isDraggingSuggested
-          ) {
-            e.preventDefault();
-          }
-        }}
-        onDragStart={(e) => e.preventDefault()}
-        draggable={false}
-      >
-        <div className="for-you__book-image-wrapper">
-          {!isLoggedIn && book.subscriptionRequired && (
-            <span className="for-you__premium-pill">Premium</span>
-          )}
+  href={`/book/${book.id}`}
+  key={book.id}
+  className="for-you__book-card"
+  onClick={(e) => {
+    if (
+      hasDraggedRef.current ||
+      isDraggingRecommended ||
+      isDraggingSuggested
+    ) {
+      e.preventDefault();
+    }
+  }}
+  onDragStart={(e) => e.preventDefault()}
+  draggable={false}
+>
+  {!isLoggedIn && book.subscriptionRequired && (
+    <span className="for-you__premium-pill">Premium</span>
+  )}
 
-          <div className="for-you__book-image-bg" />
+  <div className="for-you__book-image-wrapper">
+    <div className="for-you__book-image-bg" />
 
-          <img
-            src={book.imageLink}
-            alt={book.title}
-            className="for-you__book-image"
-            draggable={false}
-          />
-        </div>
+    <img
+      src={book.imageLink}
+      alt={book.title}
+      className="for-you__book-image"
+      draggable={false}
+    />
+  </div>
 
         <h3 className="for-you__book-title">{book.title}</h3>
         <p className="for-you__book-author">{book.author}</p>
