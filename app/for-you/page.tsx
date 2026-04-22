@@ -8,6 +8,8 @@ import {
   FiSettings,
   FiHelpCircle,
   FiLogOut,
+  FiMenu,
+  FiX,
 } from "react-icons/fi";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -40,6 +42,8 @@ export default function ForYouPage() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const [isDraggingRecommended, setIsDraggingRecommended] = useState(false);
   const [isDraggingSuggested, setIsDraggingSuggested] = useState(false);
 
@@ -52,34 +56,46 @@ export default function ForYouPage() {
   const startXRef = useRef(0);
   const scrollLeftRef = useRef(0);
 
+  const openMobileMenu = () => setIsMobileMenuOpen(true);
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
   useEffect(() => {
     const syncLoginState = () => {
       const storedLogin = localStorage.getItem("isLoggedIn");
       setIsLoggedIn(storedLogin !== "false");
     };
-  
+
     syncLoginState();
-  
+
     const fetchBooks = async () => {
       const startTime = Date.now();
-  
+
       try {
         const [selected, recommended, suggested] = await Promise.all([
-          fetch("https://us-central1-summaristt.cloudfunctions.net/getBooks?status=selected").then(res => res.json()),
-          fetch("https://us-central1-summaristt.cloudfunctions.net/getBooks?status=recommended").then(res => res.json()),
-          fetch("https://us-central1-summaristt.cloudfunctions.net/getBooks?status=suggested").then(res => res.json()),
+          fetch(
+            "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=selected"
+          ).then((res) => res.json()),
+          fetch(
+            "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=recommended"
+          ).then((res) => res.json()),
+          fetch(
+            "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=suggested"
+          ).then((res) => res.json()),
         ]);
-  
+
         setSelectedBook(Array.isArray(selected) ? selected[0] : selected);
-        setRecommendedBooks(Array.isArray(recommended) ? recommended.slice(0, 8) : []);
-        setSuggestedBooks(Array.isArray(suggested) ? suggested.slice(0, 7) : []);
+        setRecommendedBooks(
+          Array.isArray(recommended) ? recommended.slice(0, 8) : []
+        );
+        setSuggestedBooks(
+          Array.isArray(suggested) ? suggested.slice(0, 7) : []
+        );
       } catch (error) {
         console.error("Error fetching books:", error);
       } finally {
         const elapsed = Date.now() - startTime;
-  
-        const MIN_LOADING_TIME = 700; // 👈 tweak this (600–900 is sweet spot)
-  
+        const MIN_LOADING_TIME = 700;
+
         if (elapsed < MIN_LOADING_TIME) {
           setTimeout(() => setIsLoading(false), MIN_LOADING_TIME - elapsed);
         } else {
@@ -87,9 +103,9 @@ export default function ForYouPage() {
         }
       }
     };
-  
+
     fetchBooks();
-  
+
     window.addEventListener("storage", syncLoginState);
     return () => window.removeEventListener("storage", syncLoginState);
   }, []);
@@ -253,10 +269,10 @@ export default function ForYouPage() {
   const renderBookSkeleton = (key: number) => {
     return (
       <div className="for-you__book-card skeleton-card" key={key}>
-       <div className="for-you__book-image-wrapper">
-  <div className="skeleton-circle" />
-  <div className="skeleton-book" />
-</div>
+        <div className="for-you__book-image-wrapper">
+          <div className="skeleton-circle" />
+          <div className="skeleton-book" />
+        </div>
         <div className="skeleton-line skeleton-line--title" />
         <div className="skeleton-line skeleton-line--author" />
         <div className="skeleton-line skeleton-line--subtitle" />
@@ -271,9 +287,9 @@ export default function ForYouPage() {
         <div className="skeleton-line skeleton-line--selected-left" />
         <div className="for-you__selected-divider" />
         <div className="for-you__selected-center">
-  <div className="skeleton-block skeleton-circle-selected" />
-  <div className="skeleton-book-selected" />
-</div>
+          <div className="skeleton-block skeleton-circle-selected" />
+          <div className="skeleton-book-selected" />
+        </div>
         <div className="for-you__selected-right">
           <div className="skeleton-line skeleton-line--selected-title" />
           <div className="skeleton-line skeleton-line--selected-author" />
@@ -363,6 +379,111 @@ export default function ForYouPage() {
         </div>
       </aside>
 
+      {isMobileMenuOpen && (
+        <div className="for-you__mobile-overlay" onClick={closeMobileMenu} />
+      )}
+
+      <div
+        className={`for-you__mobile-sidebar ${
+          isMobileMenuOpen ? "is-open" : ""
+        }`}
+      >
+        <div className="for-you__mobile-sidebar-top">
+          <div className="for-you__logo">
+            <img src="/assets/logo.png" alt="Summarist" />
+          </div>
+
+          <button
+            className="for-you__mobile-close-btn"
+            type="button"
+            onClick={closeMobileMenu}
+          >
+            <FiX />
+          </button>
+        </div>
+
+        <nav className="for-you__nav">
+          <Link
+            href="/for-you"
+            className="for-you__nav-link for-you__nav-link--clickable active"
+            onClick={closeMobileMenu}
+          >
+            <HiOutlineHome />
+            <span>For you</span>
+          </Link>
+
+          <Link
+            href="/my-library"
+            className="for-you__nav-link for-you__nav-link--clickable"
+            onClick={closeMobileMenu}
+          >
+            <HiOutlineBookmark />
+            <span>My Library</span>
+          </Link>
+
+          <button
+            className="for-you__nav-link for-you__nav-link--inactive"
+            type="button"
+          >
+            <FiEdit3 />
+            <span>Highlights</span>
+          </button>
+
+          <button
+            className="for-you__nav-link for-you__nav-link--inactive"
+            type="button"
+          >
+            <FiSearch />
+            <span>Search</span>
+          </button>
+        </nav>
+
+        <div className="for-you__sidebar-bottom">
+          <Link
+            href="/settings"
+            className="for-you__nav-link for-you__nav-link--clickable"
+            onClick={closeMobileMenu}
+          >
+            <FiSettings />
+            <span>Settings</span>
+          </Link>
+
+          <button
+            className="for-you__nav-link for-you__nav-link--inactive"
+            type="button"
+          >
+            <FiHelpCircle />
+            <span>Help &amp; Support</span>
+          </button>
+
+          {isLoggedIn ? (
+            <button
+              className="for-you__nav-link for-you__nav-link--clickable"
+              type="button"
+              onClick={() => {
+                handleLogout();
+                closeMobileMenu();
+              }}
+            >
+              <FiLogOut />
+              <span>Logout</span>
+            </button>
+          ) : (
+            <button
+              className="for-you__nav-link for-you__nav-link--clickable"
+              type="button"
+              onClick={() => {
+                handleLoginClick();
+                closeMobileMenu();
+              }}
+            >
+              <FiLogOut />
+              <span>Login</span>
+            </button>
+          )}
+        </div>
+      </div>
+
       <main className="for-you__main">
         <div className="for-you__topbar">
           <div className="for-you__search">
@@ -371,6 +492,14 @@ export default function ForYouPage() {
               <FaSearch />
             </button>
           </div>
+
+          <button
+            className="for-you__mobile-menu-btn"
+            type="button"
+            onClick={openMobileMenu}
+          >
+            <FiMenu />
+          </button>
         </div>
 
         <div className="for-you__content">
