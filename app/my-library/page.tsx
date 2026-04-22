@@ -345,58 +345,83 @@ export default function MyLibraryPage() {
           </div>
         </div>
 
-        <div className="my-library">
-          <section className="my-library__section">
-            <h2 className="my-library__section-title">Saved Books</h2>
-            <p className="my-library__section-count">
-              {savedBooks.length} {savedBooks.length === 1 ? "item" : "items"}
-            </p>
+        {!isLoggedIn ? (
+          <div className="settings-page">
+            <h1 className="settings-page__title">My Library</h1>
 
-            {isLoading ? (
-              <div className="my-library__saved-grid">
-                {Array.from({ length: 3 }).map((_, index) =>
-                  renderSkeletonCard(index)
-                )}
-              </div>
-            ) : savedBooks.length === 0 ? (
-              <div className="my-library__empty-state">
-                <h3>Save your favorite books!</h3>
-                <p>When you save a book, it will appear here.</p>
-              </div>
-            ) : (
-              <div className="my-library__saved-grid">
-                {savedBooks.map(renderBookCard)}
-              </div>
-            )}
-          </section>
+            <div className="settings-page__logged-out">
+              <img
+                src="/assets/login.webp"
+                alt="Login"
+                className="settings-page__logged-out-image"
+              />
 
-          <section className="my-library__section">
-            <h2 className="my-library__section-title">Finished</h2>
-            <p className="my-library__section-count">
-              {isLoading
-                ? "Loading..."
-                : `${finishedBooks.length} ${
-                    finishedBooks.length === 1 ? "item" : "items"
-                  }`}
-            </p>
+              <h2 className="settings-page__logged-out-title">
+                Log in to your account to see your library.
+              </h2>
 
-            <div
-              ref={carouselRef}
-              className={`my-library__carousel ${
-                isDragging ? "is-dragging" : ""
-              }`}
-              onMouseDown={handleMouseDown}
-              onWheel={handleWheel}
-              onDragStart={(e) => e.preventDefault()}
-            >
-              {isLoading
-                ? Array.from({ length: 13 }).map((_, index) =>
-                    renderSkeletonCard(index + 100)
-                  )
-                : finishedBooks.map(renderBookCard)}
+              <button
+                className="settings-page__login-button"
+                onClick={handleLoginClick}
+              >
+                Login
+              </button>
             </div>
-          </section>
-        </div>
+          </div>
+        ) : (
+          <div className="my-library">
+            <section className="my-library__section">
+              <h2 className="my-library__section-title">Saved Books</h2>
+              <p className="my-library__section-count">
+                {savedBooks.length} {savedBooks.length === 1 ? "item" : "items"}
+              </p>
+
+              {isLoading ? (
+                <div className="my-library__saved-grid">
+                  {Array.from({ length: 3 }).map((_, index) =>
+                    renderSkeletonCard(index)
+                  )}
+                </div>
+              ) : savedBooks.length === 0 ? (
+                <div className="my-library__empty-state">
+                  <h3>Save your favorite books!</h3>
+                  <p>When you save a book, it will appear here.</p>
+                </div>
+              ) : (
+                <div className="my-library__saved-grid">
+                  {savedBooks.map(renderBookCard)}
+                </div>
+              )}
+            </section>
+
+            <section className="my-library__section">
+              <h2 className="my-library__section-title">Finished</h2>
+              <p className="my-library__section-count">
+                {isLoading
+                  ? "Loading..."
+                  : `${finishedBooks.length} ${
+                      finishedBooks.length === 1 ? "item" : "items"
+                    }`}
+              </p>
+
+              <div
+                ref={carouselRef}
+                className={`my-library__carousel ${
+                  isDragging ? "is-dragging" : ""
+                }`}
+                onMouseDown={handleMouseDown}
+                onWheel={handleWheel}
+                onDragStart={(e) => e.preventDefault()}
+              >
+                {isLoading
+                  ? Array.from({ length: 13 }).map((_, index) =>
+                      renderSkeletonCard(index + 100)
+                    )
+                  : finishedBooks.map(renderBookCard)}
+              </div>
+            </section>
+          </div>
+        )}
       </main>
 
       <LoginModal isOpen={isLoginModalOpen} onClose={handleLoginModalClose} />
