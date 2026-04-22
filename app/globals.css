@@ -1130,7 +1130,7 @@ button:active {
 
 
 .for-you__book-card:hover {
-  background-color: #f1f3f2;
+  background-color: #f1f6f4;
 }
 
 .for-you__selected-divider {
@@ -1287,11 +1287,6 @@ button:active {
   padding: 5px 8px;
   border-radius: 999px;
   white-space: nowrap;
-}
-
-
-.for-you__book-card:hover {
-  background-color: #f1f3f2;
 }
 
 .for-you__selected-card {
@@ -2179,7 +2174,7 @@ button:active {
 }
 
 .my-library__book-card:hover {
-  background-color: #f1f3f2;
+  background-color: #f1f6f4;
 }
 
 .my-library__book-image-wrap {
