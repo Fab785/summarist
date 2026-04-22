@@ -97,16 +97,24 @@ export default function SettingsPage() {
           </div>
 
           {isLoggedIn ? (
-            <div className="for-you__nav-link" onClick={handleLogout}>
-              <FiLogOut />
-              <span>Logout</span>
-            </div>
-          ) : (
-            <div className="for-you__nav-link" onClick={openLoginModal}>
-              <FiLogOut />
-              <span>Login</span>
-            </div>
-          )}
+  <button
+    className="for-you__nav-link for-you__nav-link--clickable"
+    type="button"
+    onClick={handleLogout}
+  >
+    <FiLogOut />
+    <span>Logout</span>
+  </button>
+) : (
+  <button
+    className="for-you__nav-link for-you__nav-link--clickable"
+    type="button"
+    onClick={openLoginModal}
+  >
+    <FiLogOut />
+    <span>Login</span>
+  </button>
+)}
         </div>
       </aside>
 
