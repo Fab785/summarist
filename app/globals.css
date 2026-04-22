@@ -2410,3 +2410,76 @@ button:disabled {
     transform: translateY(0);
   }
 }
+
+/* My Lib SKELETON */
+.my-library__skeleton-card-wrap {
+  pointer-events: none;
+}
+
+.my-library__skeleton-circle,
+.my-library__skeleton-book,
+.my-library__skeleton-line {
+  position: relative;
+  overflow: hidden;
+  background: #e9eceb;
+}
+
+.my-library__skeleton-circle::after,
+.my-library__skeleton-book::after,
+.my-library__skeleton-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.55),
+    transparent
+  );
+  animation: shimmer 1.3s infinite;
+}
+
+.my-library__skeleton-circle {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 184px;
+  height: 78px;
+  border-radius: 180px 180px 0 0;
+}
+
+.my-library__skeleton-book {
+  position: relative;
+  z-index: 1;
+  width: 172px;
+  height: 172px;
+  border-radius: 2px;
+  margin: 0 auto;
+}
+
+.my-library__skeleton-line {
+  height: 12px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+
+.my-library__skeleton-line--title {
+  width: 86%;
+  height: 18px;
+}
+
+.my-library__skeleton-line--author {
+  width: 52%;
+}
+
+.my-library__skeleton-line--subtitle {
+  width: 92%;
+  height: 28px;
+}
+
+.my-library__skeleton-line--meta {
+  width: 58%;
+  margin-bottom: 0;
+}

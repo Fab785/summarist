@@ -54,10 +54,12 @@ export default function MyLibraryPage() {
     };
 
     const loadLibrary = async () => {
+      const startTime = Date.now();
+    
       try {
         const saved = JSON.parse(localStorage.getItem("myLibrary") || "[]");
         setSavedBooks(saved);
-
+    
         const [selected, recommended, suggested] = await Promise.all([
           fetch(
             "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=selected"
@@ -69,25 +71,32 @@ export default function MyLibraryPage() {
             "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=suggested"
           ).then((res) => res.json()),
         ]);
-
+    
         const allBooks = [
           ...(Array.isArray(selected) ? selected : [selected]),
           ...(Array.isArray(recommended) ? recommended : []),
           ...(Array.isArray(suggested) ? suggested : []),
         ];
-
+    
         const savedIds = new Set(saved.map((book: Book) => String(book.id)));
         const finished = allBooks.filter(
           (book: Book) => !savedIds.has(String(book.id))
         );
-
+    
         setFinishedBooks(finished);
       } catch (error) {
         console.error("Error loading library:", error);
       } finally {
-        setTimeout(() => {
+        const elapsed = Date.now() - startTime;
+        const MIN_LOADING_TIME = 700;
+    
+        if (elapsed < MIN_LOADING_TIME) {
+          setTimeout(() => {
+            setIsLoading(false);
+          }, MIN_LOADING_TIME - elapsed);
+        } else {
           setIsLoading(false);
-        }, 300);
+        }
       }
     };
 
@@ -226,19 +235,18 @@ export default function MyLibraryPage() {
   );
 
   const renderSkeletonCard = (key: number) => (
-    <div className="my-library__book-card" key={key}>
+    <div className="my-library__book-card my-library__skeleton-card-wrap" key={key}>
       <div className="my-library__book-image-wrap">
-        <div className="my-library__skeleton-image-bg" />
-        <div className="my-library__skeleton-image" />
+        <div className="my-library__skeleton-circle" />
+        <div className="my-library__skeleton-book" />
       </div>
-
-      <div className="my-library__skeleton-title" />
-      <div className="my-library__skeleton-author" />
-      <div className="my-library__skeleton-subtitle" />
-
+  
+      <div className="my-library__skeleton-line my-library__skeleton-line--title" />
+      <div className="my-library__skeleton-line my-library__skeleton-line--author" />
+      <div className="my-library__skeleton-line my-library__skeleton-line--subtitle" />
+  
       <div className="my-library__book-meta">
-        <div className="my-library__skeleton-meta" />
-        <div className="my-library__skeleton-meta" />
+        <div className="my-library__skeleton-line my-library__skeleton-line--meta" />
       </div>
     </div>
   );
