@@ -194,7 +194,7 @@ export default function ForYouPage() {
   };
 
   const formatDuration = () => {
-    return "00:00";
+    return "03:23";
   };
 
   const renderBookCard = (book: Book) => {
@@ -388,7 +388,7 @@ export default function ForYouPage() {
                     <div className="for-you__selected-play">
                       <FaPlay />
                     </div>
-                    <span>{formatDuration()}</span>
+                    <span className="for-you__audio-time">3 mins 23 secs</span>
                   </div>
                 </div>
               </Link>

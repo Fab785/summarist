@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { HiOutlineHome, HiOutlineBookmark } from "react-icons/hi";
+import LoginModal from "../components/LoginModal";
 import {
   FiEdit3,
   FiSearch,
@@ -37,6 +38,9 @@ export default function MyLibraryPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
 
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const isPointerDownRef = useRef(false);
   const hasDraggedRef = useRef(false);
@@ -44,6 +48,11 @@ export default function MyLibraryPage() {
   const scrollLeftRef = useRef(0);
 
   useEffect(() => {
+    const syncLoginState = () => {
+      const storedLogin = localStorage.getItem("isLoggedIn");
+      setIsLoggedIn(storedLogin !== "false");
+    };
+
     const loadLibrary = async () => {
       try {
         const saved = JSON.parse(localStorage.getItem("myLibrary") || "[]");
@@ -82,7 +91,11 @@ export default function MyLibraryPage() {
       }
     };
 
+    syncLoginState();
     loadLibrary();
+
+    window.addEventListener("storage", syncLoginState);
+    return () => window.removeEventListener("storage", syncLoginState);
   }, []);
 
   useEffect(() => {
@@ -142,6 +155,21 @@ export default function MyLibraryPage() {
       event.preventDefault();
       carousel.scrollLeft += event.deltaY;
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.setItem("isLoggedIn", "false");
+    setIsLoggedIn(false);
+  };
+
+  const handleLoginClick = () => {
+    setIsLoginModalOpen(true);
+  };
+
+  const handleLoginModalClose = () => {
+    setIsLoginModalOpen(false);
+    const storedLogin = localStorage.getItem("isLoggedIn");
+    setIsLoggedIn(storedLogin !== "false");
   };
 
   const formatDuration = (bookId: string) => {
@@ -218,9 +246,9 @@ export default function MyLibraryPage() {
   return (
     <div className="for-you-page">
       <aside className="for-you__sidebar">
-      <div className="for-you__logo">
-  <img src="/assets/logo.png" alt="Summarist" />
-</div>
+        <div className="for-you__logo">
+          <img src="/assets/logo.png" alt="Summarist" />
+        </div>
 
         <nav className="for-you__nav">
           <Link
@@ -242,6 +270,10 @@ export default function MyLibraryPage() {
           <button
             className="for-you__nav-link for-you__nav-link--inactive"
             type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
           >
             <FiEdit3 />
             <span>Highlights</span>
@@ -250,6 +282,10 @@ export default function MyLibraryPage() {
           <button
             className="for-you__nav-link for-you__nav-link--inactive"
             type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
           >
             <FiSearch />
             <span>Search</span>
@@ -265,15 +301,37 @@ export default function MyLibraryPage() {
             <span>Settings</span>
           </Link>
 
-          <button className="for-you__nav-link" type="button">
+          <button
+            className="for-you__nav-link for-you__nav-link--inactive"
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
             <FiHelpCircle />
             <span>Help &amp; Support</span>
           </button>
 
-          <button className="for-you__nav-link" type="button">
-            <FiLogOut />
-            <span>Logout</span>
-          </button>
+          {isLoggedIn ? (
+            <button
+              className="for-you__nav-link for-you__nav-link--clickable"
+              type="button"
+              onClick={handleLogout}
+            >
+              <FiLogOut />
+              <span>Logout</span>
+            </button>
+          ) : (
+            <button
+              className="for-you__nav-link for-you__nav-link--clickable"
+              type="button"
+              onClick={handleLoginClick}
+            >
+              <FiLogOut />
+              <span>Login</span>
+            </button>
+          )}
         </div>
       </aside>
 
@@ -340,6 +398,8 @@ export default function MyLibraryPage() {
           </section>
         </div>
       </main>
+
+      <LoginModal isOpen={isLoginModalOpen} onClose={handleLoginModalClose} />
     </div>
   );
 }
