@@ -38,6 +38,7 @@ export default function ForYouPage() {
   const [suggestedBooks, setSuggestedBooks] = useState<Book[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [isDraggingRecommended, setIsDraggingRecommended] = useState(false);
   const [isDraggingSuggested, setIsDraggingSuggested] = useState(false);
@@ -56,37 +57,39 @@ export default function ForYouPage() {
       const storedLogin = localStorage.getItem("isLoggedIn");
       setIsLoggedIn(storedLogin !== "false");
     };
-
+  
     syncLoginState();
-
+  
     const fetchBooks = async () => {
+      const startTime = Date.now();
+  
       try {
-        const selected = await fetch(
-          "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=selected"
-        ).then((res) => res.json());
-
-        const recommended = await fetch(
-          "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=recommended"
-        ).then((res) => res.json());
-
-        const suggested = await fetch(
-          "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=suggested"
-        ).then((res) => res.json());
-
+        const [selected, recommended, suggested] = await Promise.all([
+          fetch("https://us-central1-summaristt.cloudfunctions.net/getBooks?status=selected").then(res => res.json()),
+          fetch("https://us-central1-summaristt.cloudfunctions.net/getBooks?status=recommended").then(res => res.json()),
+          fetch("https://us-central1-summaristt.cloudfunctions.net/getBooks?status=suggested").then(res => res.json()),
+        ]);
+  
         setSelectedBook(Array.isArray(selected) ? selected[0] : selected);
-        setRecommendedBooks(
-          Array.isArray(recommended) ? recommended.slice(0, 8) : []
-        );
-        setSuggestedBooks(
-          Array.isArray(suggested) ? suggested.slice(0, 7) : []
-        );
+        setRecommendedBooks(Array.isArray(recommended) ? recommended.slice(0, 8) : []);
+        setSuggestedBooks(Array.isArray(suggested) ? suggested.slice(0, 7) : []);
       } catch (error) {
         console.error("Error fetching books:", error);
+      } finally {
+        const elapsed = Date.now() - startTime;
+  
+        const MIN_LOADING_TIME = 700; // 👈 tweak this (600–900 is sweet spot)
+  
+        if (elapsed < MIN_LOADING_TIME) {
+          setTimeout(() => setIsLoading(false), MIN_LOADING_TIME - elapsed);
+        } else {
+          setIsLoading(false);
+        }
       }
     };
-
+  
     fetchBooks();
-
+  
     window.addEventListener("storage", syncLoginState);
     return () => window.removeEventListener("storage", syncLoginState);
   }, []);
@@ -200,35 +203,34 @@ export default function ForYouPage() {
   const renderBookCard = (book: Book) => {
     return (
       <Link
-  href={`/book/${book.id}`}
-  key={book.id}
-  className="for-you__book-card"
-  onClick={(e) => {
-    if (
-      hasDraggedRef.current ||
-      isDraggingRecommended ||
-      isDraggingSuggested
-    ) {
-      e.preventDefault();
-    }
-  }}
-  onDragStart={(e) => e.preventDefault()}
-  draggable={false}
->
-  {!isLoggedIn && book.subscriptionRequired && (
-    <span className="for-you__premium-pill">Premium</span>
-  )}
+        href={`/book/${book.id}`}
+        key={book.id}
+        className="for-you__book-card"
+        onClick={(e) => {
+          if (
+            hasDraggedRef.current ||
+            isDraggingRecommended ||
+            isDraggingSuggested
+          ) {
+            e.preventDefault();
+          }
+        }}
+        onDragStart={(e) => e.preventDefault()}
+        draggable={false}
+      >
+        {!isLoggedIn && book.subscriptionRequired && (
+          <span className="for-you__premium-pill">Premium</span>
+        )}
 
-  <div className="for-you__book-image-wrapper">
-    <div className="for-you__book-image-bg" />
-
-    <img
-      src={book.imageLink}
-      alt={book.title}
-      className="for-you__book-image"
-      draggable={false}
-    />
-  </div>
+        <div className="for-you__book-image-wrapper">
+          <div className="for-you__book-image-bg" />
+          <img
+            src={book.imageLink}
+            alt={book.title}
+            className="for-you__book-image"
+            draggable={false}
+          />
+        </div>
 
         <h3 className="for-you__book-title">{book.title}</h3>
         <p className="for-you__book-author">{book.author}</p>
@@ -245,6 +247,39 @@ export default function ForYouPage() {
           </span>
         </div>
       </Link>
+    );
+  };
+
+  const renderBookSkeleton = (key: number) => {
+    return (
+      <div className="for-you__book-card skeleton-card" key={key}>
+       <div className="for-you__book-image-wrapper">
+  <div className="skeleton-circle" />
+  <div className="skeleton-book" />
+</div>
+        <div className="skeleton-line skeleton-line--title" />
+        <div className="skeleton-line skeleton-line--author" />
+        <div className="skeleton-line skeleton-line--subtitle" />
+        <div className="skeleton-line skeleton-line--meta" />
+      </div>
+    );
+  };
+
+  const renderSelectedSkeleton = () => {
+    return (
+      <div className="for-you__selected-card skeleton-selected">
+        <div className="skeleton-line skeleton-line--selected-left" />
+        <div className="for-you__selected-divider" />
+        <div className="for-you__selected-center">
+  <div className="skeleton-block skeleton-circle-selected" />
+  <div className="skeleton-book-selected" />
+</div>
+        <div className="for-you__selected-right">
+          <div className="skeleton-line skeleton-line--selected-title" />
+          <div className="skeleton-line skeleton-line--selected-author" />
+          <div className="skeleton-line skeleton-line--selected-audio" />
+        </div>
+      </div>
     );
   };
 
@@ -275,10 +310,6 @@ export default function ForYouPage() {
           <button
             className="for-you__nav-link for-you__nav-link--inactive"
             type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
           >
             <FiEdit3 />
             <span>Highlights</span>
@@ -287,10 +318,6 @@ export default function ForYouPage() {
           <button
             className="for-you__nav-link for-you__nav-link--inactive"
             type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
           >
             <FiSearch />
             <span>Search</span>
@@ -309,10 +336,6 @@ export default function ForYouPage() {
           <button
             className="for-you__nav-link for-you__nav-link--inactive"
             type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
           >
             <FiHelpCircle />
             <span>Help &amp; Support</span>
@@ -354,44 +377,48 @@ export default function ForYouPage() {
           <section className="for-you__section">
             <h2 className="for-you__section-title">Selected just for you</h2>
 
-            {selectedBook && (
-              <Link
-                href={`/book/${selectedBook.id}`}
-                className="for-you__selected-card"
-              >
-                <div className="for-you__selected-left">
-                  <p className="for-you__selected-subtitle">
-                    {selectedBook.subTitle}
-                  </p>
-                </div>
-
-                <div className="for-you__selected-divider" />
-
-                <div className="for-you__selected-center">
-                  <div className="for-you__selected-image-bg" />
-                  <img
-                    src={selectedBook.imageLink}
-                    alt={selectedBook.title}
-                    className="for-you__selected-image"
-                  />
-                </div>
-
-                <div className="for-you__selected-right">
-                  <h3 className="for-you__selected-title">
-                    {selectedBook.title}
-                  </h3>
-                  <p className="for-you__selected-author">
-                    {selectedBook.author}
-                  </p>
-
-                  <div className="for-you__selected-audio">
-                    <div className="for-you__selected-play">
-                      <FaPlay />
-                    </div>
-                    <span className="for-you__audio-time">3 mins 23 secs</span>
+            {isLoading ? (
+              renderSelectedSkeleton()
+            ) : (
+              selectedBook && (
+                <Link
+                  href={`/book/${selectedBook.id}`}
+                  className="for-you__selected-card"
+                >
+                  <div className="for-you__selected-left">
+                    <p className="for-you__selected-subtitle">
+                      {selectedBook.subTitle}
+                    </p>
                   </div>
-                </div>
-              </Link>
+
+                  <div className="for-you__selected-divider" />
+
+                  <div className="for-you__selected-center">
+                    <div className="for-you__selected-image-bg" />
+                    <img
+                      src={selectedBook.imageLink}
+                      alt={selectedBook.title}
+                      className="for-you__selected-image"
+                    />
+                  </div>
+
+                  <div className="for-you__selected-right">
+                    <h3 className="for-you__selected-title">
+                      {selectedBook.title}
+                    </h3>
+                    <p className="for-you__selected-author">
+                      {selectedBook.author}
+                    </p>
+
+                    <div className="for-you__selected-audio">
+                      <div className="for-you__selected-play">
+                        <FaPlay />
+                      </div>
+                      <span>3 mins 23 secs</span>
+                    </div>
+                  </div>
+                </Link>
+              )
             )}
           </section>
 
@@ -410,7 +437,11 @@ export default function ForYouPage() {
               onWheel={(e) => handleCarouselWheel(e, "recommended")}
               onDragStart={(e) => e.preventDefault()}
             >
-              {recommendedBooks.map(renderBookCard)}
+              {isLoading
+                ? Array.from({ length: 5 }).map((_, i) =>
+                    renderBookSkeleton(i)
+                  )
+                : recommendedBooks.map(renderBookCard)}
             </div>
           </section>
 
@@ -427,7 +458,11 @@ export default function ForYouPage() {
               onWheel={(e) => handleCarouselWheel(e, "suggested")}
               onDragStart={(e) => e.preventDefault()}
             >
-              {suggestedBooks.map(renderBookCard)}
+              {isLoading
+                ? Array.from({ length: 5 }).map((_, i) =>
+                    renderBookSkeleton(i + 100)
+                  )
+                : suggestedBooks.map(renderBookCard)}
             </div>
           </section>
         </div>

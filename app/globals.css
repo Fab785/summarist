@@ -2273,3 +2273,140 @@ button:disabled {
 .settings-page__login-button:hover {
   filter: brightness(0.98);
 }
+
+/* SKELETON */
+
+.skeleton-block,
+.skeleton-line,
+.skeleton-book,
+.skeleton-book-selected,
+.skeleton-circle {
+  position: relative;
+  overflow: hidden;
+  background: #e9eceb;
+}
+
+.skeleton-block::after,
+.skeleton-line::after,
+.skeleton-book::after,
+.skeleton-book-selected::after,
+.skeleton-circle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.55),
+    transparent
+  );
+  animation: shimmer 1.3s infinite;
+}
+
+.skeleton-card,
+.skeleton-selected {
+  pointer-events: none;
+}
+
+.skeleton-book {
+  position: relative;
+  z-index: 1;
+  width: 120px;
+  height: 174px;
+  margin: 0 auto;
+  border-radius: 2px;
+}
+
+.skeleton-book-selected {
+  position: relative;
+  z-index: 1;
+  width: 110px;
+  height: 140px;
+  border-radius: 2px;
+}
+
+.skeleton-circle {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 176px;
+  height: 70px;
+  border-radius: 88px 88px 0 0;
+}
+
+.skeleton-circle-selected {
+  position: absolute;
+  bottom: 0;
+  width: 150px;
+  height: 75px;
+  border-radius: 75px 75px 0 0;
+}
+
+.skeleton-line {
+  height: 12px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+
+.skeleton-line--title {
+  width: 88%;
+  height: 18px;
+}
+
+.skeleton-line--author {
+  width: 55%;
+}
+
+.skeleton-line--subtitle {
+  width: 94%;
+  height: 30px;
+}
+
+.skeleton-line--meta {
+  width: 58%;
+}
+
+.skeleton-line--selected-left {
+  width: 92%;
+  height: 68px;
+  border-radius: 8px;
+}
+
+.skeleton-line--selected-title {
+  width: 82%;
+  height: 18px;
+}
+
+.skeleton-line--selected-author {
+  width: 42%;
+}
+
+.skeleton-line--selected-audio {
+  width: 56%;
+  height: 44px;
+  border-radius: 999px;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.for-you__book-card:not(.skeleton-card),
+.for-you__selected-card:not(.skeleton-selected) {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
