@@ -60,6 +60,8 @@ export default function BookDetailsPage() {
 
   useEffect(() => {
     const fetchBook = async () => {
+      const startTime = Date.now();
+
       try {
         const [selected, recommended, suggested] = await Promise.all([
           fetch(
@@ -87,7 +89,16 @@ export default function BookDetailsPage() {
         console.error("Error fetching book:", error);
         setBook(null);
       } finally {
-        setLoading(false);
+        const elapsed = Date.now() - startTime;
+        const MIN_LOADING_TIME = 700;
+
+        if (elapsed < MIN_LOADING_TIME) {
+          setTimeout(() => {
+            setLoading(false);
+          }, MIN_LOADING_TIME - elapsed);
+        } else {
+          setLoading(false);
+        }
       }
     };
 
@@ -221,7 +232,67 @@ export default function BookDetailsPage() {
         </aside>
 
         <main className="for-you__main">
-          <div className="book-details__content">Loading...</div>
+          <div className="for-you__topbar">
+            <div className="for-you__search">
+              <input type="text" placeholder="Search for books" />
+              <button type="button">
+                <FiSearch />
+              </button>
+            </div>
+          </div>
+
+          <div className="book-details__content book-details__content--skeleton">
+            <div className="book-details__hero">
+              <div className="book-details__info">
+                <div className="book-details__skeleton-line book-details__skeleton-line--title" />
+                <div className="book-details__skeleton-line book-details__skeleton-line--author" />
+                <div className="book-details__skeleton-line book-details__skeleton-line--subtitle" />
+
+                <div className="book-details__divider" />
+
+                <div className="book-details__stats">
+                  <div className="book-details__skeleton-line book-details__skeleton-line--stat" />
+                  <div className="book-details__skeleton-line book-details__skeleton-line--stat" />
+                  <div className="book-details__skeleton-line book-details__skeleton-line--stat" />
+                  <div className="book-details__skeleton-line book-details__skeleton-line--stat" />
+                </div>
+
+                <div className="book-details__divider" />
+
+                <div className="book-details__actions">
+                  <div className="book-details__skeleton-button" />
+                  <div className="book-details__skeleton-button" />
+                </div>
+
+                <div className="book-details__skeleton-line book-details__skeleton-line--save" />
+              </div>
+
+              <div className="book-details__image-wrap">
+                <div className="book-details__skeleton-circle" />
+                <div className="book-details__skeleton-book" />
+              </div>
+            </div>
+
+            <section className="book-details__section">
+              <div className="book-details__skeleton-line book-details__skeleton-line--section-title" />
+
+              <div className="book-details__tags">
+                <div className="book-details__skeleton-tag" />
+                <div className="book-details__skeleton-tag" />
+              </div>
+
+              <div className="book-details__skeleton-line book-details__skeleton-line--paragraph" />
+              <div className="book-details__skeleton-line book-details__skeleton-line--paragraph" />
+              <div className="book-details__skeleton-line book-details__skeleton-line--paragraph short" />
+            </section>
+
+            <section className="book-details__section">
+              <div className="book-details__skeleton-line book-details__skeleton-line--section-title" />
+              <div className="book-details__skeleton-line book-details__skeleton-line--paragraph" />
+              <div className="book-details__skeleton-line book-details__skeleton-line--paragraph" />
+              <div className="book-details__skeleton-line book-details__skeleton-line--paragraph short" />
+            </section>
+          </div>
         </main>
       </div>
     );

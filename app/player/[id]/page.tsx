@@ -49,6 +49,8 @@ export default function PlayerPage() {
 
   useEffect(() => {
     const fetchBook = async () => {
+      const startTime = Date.now();
+
       try {
         const [selected, recommended, suggested] = await Promise.all([
           fetch(
@@ -75,8 +77,16 @@ export default function PlayerPage() {
         setBook(matchedBook || null);
       } catch (error) {
         console.error("Error fetching book:", error);
+        setBook(null);
       } finally {
-        setLoading(false);
+        const elapsed = Date.now() - startTime;
+        const MIN_LOADING_TIME = 500;
+
+        if (elapsed < MIN_LOADING_TIME) {
+          setTimeout(() => setLoading(false), MIN_LOADING_TIME - elapsed);
+        } else {
+          setLoading(false);
+        }
       }
     };
 
@@ -206,109 +216,106 @@ export default function PlayerPage() {
     setCurrentTime(newTime);
   };
 
-  if (loading) return <div className="player-loading">Loading...</div>;
-  if (!book) return <div className="player-loading">Book not found</div>;
-
   return (
     <div className="for-you-page player-layout">
       <aside className="for-you__sidebar">
-  <div className="player-page__sidebar-top">
-    <div className="for-you__logo">
-      <img src="/assets/logo.png" alt="Summarist" />
-    </div>
+        <div className="player-page__sidebar-top">
+          <div className="for-you__logo">
+            <img src="/assets/logo.png" alt="Summarist" />
+          </div>
 
-    <nav className="for-you__nav">
-      <Link
-        href="/for-you"
-        className="for-you__nav-link for-you__nav-link--clickable"
-      >
-        <HiOutlineHome />
-        <span>For you</span>
-      </Link>
+          <nav className="for-you__nav">
+            <Link
+              href="/for-you"
+              className="for-you__nav-link for-you__nav-link--clickable"
+            >
+              <HiOutlineHome />
+              <span>For you</span>
+            </Link>
 
-      <Link
-        href="/my-library"
-        className="for-you__nav-link for-you__nav-link--clickable"
-      >
-        <HiOutlineBookmark />
-        <span>My Library</span>
-      </Link>
+            <Link
+              href="/my-library"
+              className="for-you__nav-link for-you__nav-link--clickable"
+            >
+              <HiOutlineBookmark />
+              <span>My Library</span>
+            </Link>
 
-      <button className="for-you__nav-link for-you__nav-link--inactive">
-        <FiEdit3 />
-        <span>Highlights</span>
-      </button>
+            <button className="for-you__nav-link for-you__nav-link--inactive">
+              <FiEdit3 />
+              <span>Highlights</span>
+            </button>
 
-      <button className="for-you__nav-link for-you__nav-link--inactive">
-        <FiSearch />
-        <span>Search</span>
-      </button>
-    </nav>
+            <button className="for-you__nav-link for-you__nav-link--inactive">
+              <FiSearch />
+              <span>Search</span>
+            </button>
+          </nav>
 
-    <div className="player-page__font-controls">
-      <button
-        className={`player-page__font-btn ${
-          fontSize === 16 ? "player-page__font-btn--active" : ""
-        }`}
-        onClick={() => setFontSize(16)}
-        style={{ fontSize: "20px" }}
-        type="button"
-      >
-        Aa
-      </button>
+          <div className="player-page__font-controls">
+            <button
+              className={`player-page__font-btn ${
+                fontSize === 16 ? "player-page__font-btn--active" : ""
+              }`}
+              onClick={() => setFontSize(16)}
+              style={{ fontSize: "20px" }}
+              type="button"
+            >
+              Aa
+            </button>
 
-      <button
-        className={`player-page__font-btn ${
-          fontSize === 18 ? "player-page__font-btn--active" : ""
-        }`}
-        onClick={() => setFontSize(18)}
-        style={{ fontSize: "24px" }}
-        type="button"
-      >
-        Aa
-      </button>
+            <button
+              className={`player-page__font-btn ${
+                fontSize === 18 ? "player-page__font-btn--active" : ""
+              }`}
+              onClick={() => setFontSize(18)}
+              style={{ fontSize: "24px" }}
+              type="button"
+            >
+              Aa
+            </button>
 
-      <button
-        className={`player-page__font-btn ${
-          fontSize === 22 ? "player-page__font-btn--active" : ""
-        }`}
-        onClick={() => setFontSize(22)}
-        style={{ fontSize: "28px" }}
-        type="button"
-      >
-        Aa
-      </button>
+            <button
+              className={`player-page__font-btn ${
+                fontSize === 22 ? "player-page__font-btn--active" : ""
+              }`}
+              onClick={() => setFontSize(22)}
+              style={{ fontSize: "28px" }}
+              type="button"
+            >
+              Aa
+            </button>
 
-      <button
-        className={`player-page__font-btn ${
-          fontSize === 26 ? "player-page__font-btn--active" : ""
-        }`}
-        onClick={() => setFontSize(26)}
-        style={{ fontSize: "32px" }}
-        type="button"
-      >
-        Aa
-      </button>
-    </div>
-  </div>
+            <button
+              className={`player-page__font-btn ${
+                fontSize === 26 ? "player-page__font-btn--active" : ""
+              }`}
+              onClick={() => setFontSize(26)}
+              style={{ fontSize: "32px" }}
+              type="button"
+            >
+              Aa
+            </button>
+          </div>
+        </div>
 
-  <div className="for-you__sidebar-bottom">
-    <button className="for-you__nav-link">
-      <FiSettings />
-      <span>Settings</span>
-    </button>
+        <div className="for-you__sidebar-bottom">
+          <button className="for-you__nav-link">
+            <FiSettings />
+            <span>Settings</span>
+          </button>
 
-    <button className="for-you__nav-link">
-      <FiHelpCircle />
-      <span>Help &amp; Support</span>
-    </button>
+          <button className="for-you__nav-link">
+            <FiHelpCircle />
+            <span>Help &amp; Support</span>
+          </button>
 
-    <button className="for-you__nav-link">
-      <FiLogOut />
-      <span>Logout</span>
-    </button>
-  </div>
-</aside>
+          <button className="for-you__nav-link">
+            <FiLogOut />
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
 
       <main className="for-you__main player-page">
         <div className="for-you__topbar">
@@ -320,97 +327,119 @@ export default function PlayerPage() {
           </div>
         </div>
 
-        <div className="player-page__reader">
-          <h1 className="player-page__reader-title">{book.title}</h1>
-          <div className="player-page__divider" />
-
-          <div
-            className="player-page__text"
-            style={{ fontSize: `${fontSize}px` }}
-          >
-            {[book.summary, book.bookDescription, book.authorDescription]
-              .filter(Boolean)
-              .flatMap((text) => text.split("\n\n"))
-              .map((paragraph, index) => {
-                const isTitle = paragraph.startsWith("Part");
-
-                return isTitle ? (
-                  <h3 key={index} className="player-page__section-title">
-                    {paragraph}
-                  </h3>
-                ) : (
-                  <p key={index}>{paragraph}</p>
-                );
-              })}
-          </div>
-        </div>
-
-        <audio ref={audioRef} preload="metadata">
-          <source src={book.audioLink} type="audio/mpeg" />
-          Your browser does not support the audio element.
-        </audio>
-
-        <div className="player-page__bottom-bar">
-          <div className="player-page__bottom-left">
-            <img
-              src={book.imageLink}
-              alt={book.title}
-              className="player-page__bottom-image"
-            />
-            <div className="player-page__bottom-book-info">
-              <h3>{book.title}</h3>
-              <p>{book.author}</p>
+        {loading ? (
+          <div className="player-page__reader">
+            <div className="player-page__reader-title skeleton-line skeleton-line--player-title" />
+            <div className="player-page__divider" />
+            <div className="player-page__text">
+              <div className="skeleton-line skeleton-line--player-paragraph" />
+              <div className="skeleton-line skeleton-line--player-paragraph" />
+              <div className="skeleton-line skeleton-line--player-paragraph short" />
+              <div className="skeleton-line skeleton-line--player-section" />
+              <div className="skeleton-line skeleton-line--player-paragraph" />
+              <div className="skeleton-line skeleton-line--player-paragraph" />
+              <div className="skeleton-line skeleton-line--player-paragraph short" />
             </div>
           </div>
-
-          <div className="player-page__bottom-center">
-            <button
-              className="player-page__audio-skip-btn"
-              onClick={() => handleSkip(-10)}
-              type="button"
-            >
-              <MdReplay10 />
-            </button>
-
-            <button
-              className="player-page__audio-play"
-              onClick={handlePlayPause}
-              type="button"
-            >
-              {isPlaying ? <FaPause /> : <FaPlay />}
-            </button>
-
-            <button
-              className="player-page__audio-skip-btn"
-              onClick={() => handleSkip(10)}
-              type="button"
-            >
-              <MdForward10 />
-            </button>
+        ) : !book ? (
+          <div className="player-page__reader">
+            <h1 className="player-page__reader-title">Book not found</h1>
           </div>
+        ) : (
+          <>
+            <div className="player-page__reader">
+              <h1 className="player-page__reader-title">{book.title}</h1>
+              <div className="player-page__divider" />
 
-          <div className="player-page__bottom-right">
-            <span>{formatTime(currentTime)}</span>
-
-            <div
-              className="player-page__audio-progress"
-              onClick={handleProgressClick}
-            >
               <div
-                className="player-page__audio-progress-fill"
-                style={{
-                  width: `${
-                    duration > 0 ? (currentTime / duration) * 100 : 0
-                  }%`,
-                }}
+                className="player-page__text"
+                style={{ fontSize: `${fontSize}px` }}
               >
-                <div className="player-page__audio-thumb" />
+                {[book.summary, book.bookDescription, book.authorDescription]
+                  .filter(Boolean)
+                  .flatMap((text) => text.split("\n\n"))
+                  .map((paragraph, index) => {
+                    const isTitle = paragraph.startsWith("Part");
+
+                    return isTitle ? (
+                      <h3 key={index} className="player-page__section-title">
+                        {paragraph}
+                      </h3>
+                    ) : (
+                      <p key={index}>{paragraph}</p>
+                    );
+                  })}
               </div>
             </div>
 
-            <span>{formatTime(duration)}</span>
-          </div>
-        </div>
+            <audio ref={audioRef} preload="metadata">
+              <source src={book.audioLink} type="audio/mpeg" />
+              Your browser does not support the audio element.
+            </audio>
+
+            <div className="player-page__bottom-bar">
+              <div className="player-page__bottom-left">
+                <img
+                  src={book.imageLink}
+                  alt={book.title}
+                  className="player-page__bottom-image"
+                />
+                <div className="player-page__bottom-book-info">
+                  <h3>{book.title}</h3>
+                  <p>{book.author}</p>
+                </div>
+              </div>
+
+              <div className="player-page__bottom-center">
+                <button
+                  className="player-page__audio-skip-btn"
+                  onClick={() => handleSkip(-10)}
+                  type="button"
+                >
+                  <MdReplay10 />
+                </button>
+
+                <button
+                  className="player-page__audio-play"
+                  onClick={handlePlayPause}
+                  type="button"
+                >
+                  {isPlaying ? <FaPause /> : <FaPlay />}
+                </button>
+
+                <button
+                  className="player-page__audio-skip-btn"
+                  onClick={() => handleSkip(10)}
+                  type="button"
+                >
+                  <MdForward10 />
+                </button>
+              </div>
+
+              <div className="player-page__bottom-right">
+                <span>{formatTime(currentTime)}</span>
+
+                <div
+                  className="player-page__audio-progress"
+                  onClick={handleProgressClick}
+                >
+                  <div
+                    className="player-page__audio-progress-fill"
+                    style={{
+                      width: `${
+                        duration > 0 ? (currentTime / duration) * 100 : 0
+                      }%`,
+                    }}
+                  >
+                    <div className="player-page__audio-thumb" />
+                  </div>
+                </div>
+
+                <span>{formatTime(duration)}</span>
+              </div>
+            </div>
+          </>
+        )}
       </main>
     </div>
   );
