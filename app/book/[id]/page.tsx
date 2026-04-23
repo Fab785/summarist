@@ -3,13 +3,19 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { HiOutlineHome, HiOutlineBookmark, HiBookmark } from "react-icons/hi";
+import {
+  HiOutlineHome,
+  HiOutlineBookmark,
+  HiBookmark,
+} from "react-icons/hi";
 import {
   FiEdit3,
   FiSearch,
   FiSettings,
   FiHelpCircle,
   FiLogOut,
+  FiMenu,
+  FiX,
 } from "react-icons/fi";
 import { FaStar, FaClock, FaBookOpen, FaMicrophone } from "react-icons/fa";
 import LoginModal from "@/app/components/LoginModal";
@@ -43,6 +49,10 @@ export default function BookDetailsPage() {
   const [isSaved, setIsSaved] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const openMobileMenu = () => setIsMobileMenuOpen(true);
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   useEffect(() => {
     const syncLoginState = () => {
@@ -216,7 +226,10 @@ export default function BookDetailsPage() {
       const totalSeconds = Number(cleaned);
       const mins = Math.floor(totalSeconds / 60);
       const secs = totalSeconds % 60;
-      return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+      return `${String(mins).padStart(2, "0")}:${String(secs).padStart(
+        2,
+        "0"
+      )}`;
     }
 
     return "03:24";
@@ -231,6 +244,30 @@ export default function BookDetailsPage() {
           </div>
         </aside>
 
+        {isMobileMenuOpen && (
+          <div className="for-you__mobile-overlay" onClick={closeMobileMenu} />
+        )}
+
+        <div
+          className={`for-you__mobile-sidebar ${
+            isMobileMenuOpen ? "is-open" : ""
+          }`}
+        >
+          <div className="for-you__mobile-sidebar-top">
+            <div className="for-you__logo">
+              <img src="/assets/logo.png" alt="Summarist" />
+            </div>
+
+            <button
+              className="for-you__mobile-close-btn"
+              type="button"
+              onClick={closeMobileMenu}
+            >
+              <FiX />
+            </button>
+          </div>
+        </div>
+
         <main className="for-you__main">
           <div className="for-you__topbar">
             <div className="for-you__search">
@@ -239,6 +276,14 @@ export default function BookDetailsPage() {
                 <FiSearch />
               </button>
             </div>
+
+            <button
+              className="for-you__mobile-menu-btn"
+              type="button"
+              onClick={openMobileMenu}
+            >
+              <FiMenu />
+            </button>
           </div>
 
           <div className="book-details__content book-details__content--skeleton">
@@ -272,26 +317,6 @@ export default function BookDetailsPage() {
                 <div className="book-details__skeleton-book" />
               </div>
             </div>
-
-            <section className="book-details__section">
-              <div className="book-details__skeleton-line book-details__skeleton-line--section-title" />
-
-              <div className="book-details__tags">
-                <div className="book-details__skeleton-tag" />
-                <div className="book-details__skeleton-tag" />
-              </div>
-
-              <div className="book-details__skeleton-line book-details__skeleton-line--paragraph" />
-              <div className="book-details__skeleton-line book-details__skeleton-line--paragraph" />
-              <div className="book-details__skeleton-line book-details__skeleton-line--paragraph short" />
-            </section>
-
-            <section className="book-details__section">
-              <div className="book-details__skeleton-line book-details__skeleton-line--section-title" />
-              <div className="book-details__skeleton-line book-details__skeleton-line--paragraph" />
-              <div className="book-details__skeleton-line book-details__skeleton-line--paragraph" />
-              <div className="book-details__skeleton-line book-details__skeleton-line--paragraph short" />
-            </section>
           </div>
         </main>
       </div>
@@ -307,11 +332,49 @@ export default function BookDetailsPage() {
           </div>
         </aside>
 
+        {isMobileMenuOpen && (
+          <div className="for-you__mobile-overlay" onClick={closeMobileMenu} />
+        )}
+
+        <div
+          className={`for-you__mobile-sidebar ${
+            isMobileMenuOpen ? "is-open" : ""
+          }`}
+        >
+          <div className="for-you__mobile-sidebar-top">
+            <div className="for-you__logo">
+              <img src="/assets/logo.png" alt="Summarist" />
+            </div>
+
+            <button
+              className="for-you__mobile-close-btn"
+              type="button"
+              onClick={closeMobileMenu}
+            >
+              <FiX />
+            </button>
+          </div>
+        </div>
+
         <main className="for-you__main">
+          <div className="for-you__topbar">
+            <div className="for-you__search">
+              <input type="text" placeholder="Search for books" />
+              <button type="button">
+                <FiSearch />
+              </button>
+            </div>
+
+            <button
+              className="for-you__mobile-menu-btn"
+              type="button"
+              onClick={openMobileMenu}
+            >
+              <FiMenu />
+            </button>
+          </div>
+
           <div className="book-details__content">
-            <Link href="/for-you" className="book-details__back">
-              ← Back
-            </Link>
             <h1 className="book-details__not-found">Book not found</h1>
           </div>
         </main>
@@ -346,10 +409,6 @@ export default function BookDetailsPage() {
           <button
             className="for-you__nav-link for-you__nav-link--inactive"
             type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
           >
             <FiEdit3 />
             <span>Highlights</span>
@@ -358,10 +417,6 @@ export default function BookDetailsPage() {
           <button
             className="for-you__nav-link for-you__nav-link--inactive"
             type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
           >
             <FiSearch />
             <span>Search</span>
@@ -380,10 +435,6 @@ export default function BookDetailsPage() {
           <button
             className="for-you__nav-link for-you__nav-link--inactive"
             type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
           >
             <FiHelpCircle />
             <span>Help &amp; Support</span>
@@ -400,6 +451,97 @@ export default function BookDetailsPage() {
         </div>
       </aside>
 
+      {isMobileMenuOpen && (
+        <div className="for-you__mobile-overlay" onClick={closeMobileMenu} />
+      )}
+
+      <div
+        className={`for-you__mobile-sidebar ${
+          isMobileMenuOpen ? "is-open" : ""
+        }`}
+      >
+        <div className="for-you__mobile-sidebar-top">
+          <div className="for-you__logo">
+            <img src="/assets/logo.png" alt="Summarist" />
+          </div>
+
+          <button
+            className="for-you__mobile-close-btn"
+            type="button"
+            onClick={closeMobileMenu}
+          >
+            <FiX />
+          </button>
+        </div>
+
+        <nav className="for-you__nav">
+          <Link
+            href="/for-you"
+            className="for-you__nav-link for-you__nav-link--clickable"
+            onClick={closeMobileMenu}
+          >
+            <HiOutlineHome />
+            <span>For you</span>
+          </Link>
+
+          <Link
+            href="/my-library"
+            className="for-you__nav-link for-you__nav-link--clickable"
+            onClick={closeMobileMenu}
+          >
+            <HiOutlineBookmark />
+            <span>My Library</span>
+          </Link>
+
+          <button
+            className="for-you__nav-link for-you__nav-link--inactive"
+            type="button"
+          >
+            <FiEdit3 />
+            <span>Highlights</span>
+          </button>
+
+          <button
+            className="for-you__nav-link for-you__nav-link--inactive"
+            type="button"
+          >
+            <FiSearch />
+            <span>Search</span>
+          </button>
+        </nav>
+
+        <div className="for-you__sidebar-bottom">
+          <Link
+            href="/settings"
+            className="for-you__nav-link for-you__nav-link--clickable"
+            onClick={closeMobileMenu}
+          >
+            <FiSettings />
+            <span>Settings</span>
+          </Link>
+
+          <button
+            className="for-you__nav-link for-you__nav-link--inactive"
+            type="button"
+          >
+            <FiHelpCircle />
+            <span>Help &amp; Support</span>
+          </button>
+
+          <button
+            className="for-you__nav-link for-you__nav-link--clickable"
+            type="button"
+            onClick={() => {
+              handleLogoutOrLogin();
+              closeMobileMenu();
+            }}
+          >
+            <FiLogOut />
+            <span>{isLoggedIn ? "Logout" : "Login"}</span>
+          </button>
+        </div>
+      </div>
+
       <main className="for-you__main">
         <div className="for-you__topbar">
           <div className="for-you__search">
@@ -408,10 +550,27 @@ export default function BookDetailsPage() {
               <FiSearch />
             </button>
           </div>
+
+          <button
+            className="for-you__mobile-menu-btn"
+            type="button"
+            onClick={openMobileMenu}
+          >
+            <FiMenu />
+          </button>
         </div>
 
         <div className="book-details__content">
           <div className="book-details__hero">
+            <div className="book-details__image-wrap">
+              <div className="book-details__image-bg" />
+              <img
+                src={book.imageLink}
+                alt={book.title}
+                className="book-details__image"
+              />
+            </div>
+
             <div className="book-details__info">
               <h1 className="book-details__title">{book.title}</h1>
 
@@ -426,7 +585,7 @@ export default function BookDetailsPage() {
               <div className="book-details__stats">
                 <div className="book-details__stat">
                   <FaStar />
-                  <span>{book.averageRating} (608 ratings)</span>
+                  <span>{book.averageRating} (726 ratings)</span>
                 </div>
 
                 <div className="book-details__stat">
@@ -477,36 +636,27 @@ export default function BookDetailsPage() {
                   {isSaved ? "Saved in My Library" : "Add title to My Library"}
                 </span>
               </button>
-            </div>
 
-            <div className="book-details__image-wrap">
-              <div className="book-details__image-bg" />
-              <img
-                src={book.imageLink}
-                alt={book.title}
-                className="book-details__image"
-              />
+              <section className="book-details__section">
+                <h2 className="book-details__section-title">What&apos;s it about?</h2>
+
+                <div className="book-details__tags">
+                  {book.tags?.slice(0, 2).map((tag) => (
+                    <span key={tag} className="book-details__tag">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <p className="book-details__text">{book.bookDescription}</p>
+              </section>
+
+              <section className="book-details__section">
+                <h2 className="book-details__section-title">About the author</h2>
+                <p className="book-details__text">{book.authorDescription}</p>
+              </section>
             </div>
           </div>
-
-          <section className="book-details__section">
-            <h2 className="book-details__section-title">What&apos;s it about?</h2>
-
-            <div className="book-details__tags">
-              {book.tags?.slice(0, 2).map((tag) => (
-                <span key={tag} className="book-details__tag">
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            <p className="book-details__text">{book.bookDescription}</p>
-          </section>
-
-          <section className="book-details__section">
-            <h2 className="book-details__section-title">About the author</h2>
-            <p className="book-details__text">{book.authorDescription}</p>
-          </section>
         </div>
       </main>
 

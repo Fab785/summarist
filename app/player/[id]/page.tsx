@@ -10,6 +10,8 @@ import {
   FiSettings,
   FiHelpCircle,
   FiLogOut,
+  FiMenu,
+  FiX,
 } from "react-icons/fi";
 import { FaPlay, FaPause } from "react-icons/fa";
 import { MdReplay10, MdForward10 } from "react-icons/md";
@@ -44,6 +46,8 @@ export default function PlayerPage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -161,6 +165,13 @@ export default function PlayerPage() {
     }
   }, [book?.audioLink]);
 
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
+
   const formatTime = (time: number) => {
     if (!Number.isFinite(time) || time < 0) return "00:00";
 
@@ -218,16 +229,38 @@ export default function PlayerPage() {
 
   return (
     <div className="for-you-page player-layout">
-      <aside className="for-you__sidebar">
-        <div className="player-page__sidebar-top">
+      {isMobileMenuOpen && (
+        <div
+          className="player-page__mobile-overlay"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
+      <aside
+        className={`for-you__sidebar ${
+          isMobileMenuOpen ? "player-page__mobile-sidebar-open" : ""
+        }`}
+      >
+        <div className="player-page__mobile-sidebar-top">
           <div className="for-you__logo">
             <img src="/assets/logo.png" alt="Summarist" />
           </div>
 
+          <button
+            type="button"
+            className="player-page__mobile-close-btn"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            <FiX />
+          </button>
+        </div>
+
+        <div className="player-page__sidebar-top">
           <nav className="for-you__nav">
             <Link
               href="/for-you"
               className="for-you__nav-link for-you__nav-link--clickable"
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               <HiOutlineHome />
               <span>For you</span>
@@ -236,6 +269,7 @@ export default function PlayerPage() {
             <Link
               href="/my-library"
               className="for-you__nav-link for-you__nav-link--clickable"
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               <HiOutlineBookmark />
               <span>My Library</span>
@@ -325,6 +359,14 @@ export default function PlayerPage() {
               <FiSearch />
             </button>
           </div>
+
+          <button
+            type="button"
+            className="player-page__burger-btn"
+            onClick={() => setIsMobileMenuOpen(true)}
+          >
+            <FiMenu />
+          </button>
         </div>
 
         {loading ? (
