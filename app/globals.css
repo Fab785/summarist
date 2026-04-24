@@ -3089,3 +3089,149 @@ button:disabled {
     transform: translateY(-50%);
   }
 }
+
+/* UPGRADE */
+
+.upgrade-page {
+  min-height: 100vh;
+  background: #ffffff;
+  color: #032b41;
+}
+
+.upgrade-hero {
+  position: relative;
+  background: #032b41;
+  color: #ffffff;
+  text-align: center;
+  padding: 56px 24px 0;
+  min-height: 575px;
+  border-bottom-left-radius: 50% 18%;
+  border-bottom-right-radius: 50% 18%;
+}
+
+.upgrade-hero h1 {
+  font-size: 48px;
+  line-height: 1.15;
+  font-weight: 700;
+  margin-bottom: 40px;
+}
+
+.upgrade-hero p {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 36px;
+}
+
+.upgrade-hero__image-wrap {
+  width: 360px;
+  height: 360px;
+  background: #ffffff;
+  border-radius: 50% 50% 0 0;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.upgrade-hero__image {
+  width: 260px;
+  height: auto;
+  object-fit: contain;
+}
+
+.upgrade-hero__placeholder {
+  width: 200px;
+  height: 120px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #e5e7eb, #cbd5e1);
+}
+
+.upgrade-benefits {
+  max-width: 900px;
+  margin: 48px auto 32px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
+  text-align: center;
+}
+
+.upgrade-benefit svg {
+  font-size: 52px;
+  color: #032b41;
+  margin-bottom: 18px;
+}
+
+.upgrade-benefit p {
+  font-size: 16px;
+  line-height: 1.45;
+  color: #394547;
+}
+
+.upgrade-benefit strong {
+  color: #032b41;
+  font-weight: 700;
+}
+
+.upgrade-action {
+  text-align: center;
+  padding-bottom: 60px;
+  margin-top: -8px;
+}
+
+.upgrade-action button {
+  width: 320px;
+  height: 44px;
+  background: #2bd97f;
+  border: none;
+  border-radius: 4px;
+  color: #032b41;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.upgrade-action button:hover {
+  filter: brightness(0.96);
+}
+
+.upgrade-action p {
+  margin-top: 14px;
+  font-size: 13px;
+  color: #6b757b;
+}
+
+@media (max-width: 768px) {
+  .upgrade-hero {
+    min-height: 520px;
+    padding-top: 42px;
+  }
+
+  .upgrade-hero h1 {
+    font-size: 34px;
+  }
+
+  .upgrade-hero p {
+    font-size: 16px;
+  }
+
+  .upgrade-hero__image-wrap {
+    width: 280px;
+    height: 280px;
+  }
+
+  .upgrade-hero__image {
+    width: 210px;
+  }
+
+  .upgrade-benefits {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    margin: 48px auto;
+  }
+
+  .upgrade-action button {
+    width: calc(100% - 48px);
+    max-width: 320px;
+  }
+}
