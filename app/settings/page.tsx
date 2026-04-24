@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { HiOutlineHome, HiOutlineBookmark } from "react-icons/hi";
 import {
@@ -14,20 +15,28 @@ import { FaSearch } from "react-icons/fa";
 import LoginModal from "@/app/components/LoginModal";
 
 export default function SettingsPage() {
+  const router = useRouter();
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [userPlan, setUserPlan] = useState("");
+  const [loginMethod, setLoginMethod] = useState("");
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
-  // Sync login state
-  useEffect(() => {
+  const syncUserState = () => {
     const storedLogin = localStorage.getItem("isLoggedIn");
     const storedEmail = localStorage.getItem("userEmail");
     const storedPlan = localStorage.getItem("userPlan");
+    const storedMethod = localStorage.getItem("loginMethod");
 
     setIsLoggedIn(storedLogin === "true");
     setUserEmail(storedEmail || "");
-    setUserPlan(storedPlan || "");
+    setUserPlan(storedPlan || "basic");
+    setLoginMethod(storedMethod || "");
+  };
+
+  useEffect(() => {
+    syncUserState();
   }, []);
 
   const openLoginModal = () => {
@@ -36,25 +45,30 @@ export default function SettingsPage() {
 
   const closeLoginModal = () => {
     setIsLoginModalOpen(false);
-
-    // refresh state after login
-    const storedLogin = localStorage.getItem("isLoggedIn");
-    const storedEmail = localStorage.getItem("userEmail");
-    const storedPlan = localStorage.getItem("userPlan");
-
-    setIsLoggedIn(storedLogin === "true");
-    setUserEmail(storedEmail || "");
-    setUserPlan(storedPlan || "");
+    syncUserState();
   };
 
   const handleLogout = () => {
     localStorage.setItem("isLoggedIn", "false");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userPlan");
+    localStorage.removeItem("loginMethod");
+
     setIsLoggedIn(false);
+    setUserEmail("");
+    setUserPlan("basic");
+    setLoginMethod("");
   };
+
+  const handleUpgrade = () => {
+    router.push("/upgrade");
+  };
+
+  const isPremium = userPlan === "premium-plus";
+  const isGoogleUser = loginMethod === "google";
 
   return (
     <div className="for-you-page">
-      {/* SIDEBAR */}
       <aside className="for-you__sidebar">
         <div className="for-you__logo">
           <img src="/assets/logo.png" alt="Summarist" />
@@ -83,10 +97,7 @@ export default function SettingsPage() {
         </nav>
 
         <div className="for-you__sidebar-bottom">
-          <Link
-            href="/settings"
-            className="for-you__nav-link active"
-          >
+          <Link href="/settings" className="for-you__nav-link active">
             <FiSettings />
             <span>Settings</span>
           </Link>
@@ -97,28 +108,27 @@ export default function SettingsPage() {
           </div>
 
           {isLoggedIn ? (
-  <button
-    className="for-you__nav-link for-you__nav-link--clickable"
-    type="button"
-    onClick={handleLogout}
-  >
-    <FiLogOut />
-    <span>Logout</span>
-  </button>
-) : (
-  <button
-    className="for-you__nav-link for-you__nav-link--clickable"
-    type="button"
-    onClick={openLoginModal}
-  >
-    <FiLogOut />
-    <span>Login</span>
-  </button>
-)}
+            <button
+              className="for-you__nav-link for-you__nav-link--clickable"
+              type="button"
+              onClick={handleLogout}
+            >
+              <FiLogOut />
+              <span>Logout</span>
+            </button>
+          ) : (
+            <button
+              className="for-you__nav-link for-you__nav-link--clickable"
+              type="button"
+              onClick={openLoginModal}
+            >
+              <FiLogOut />
+              <span>Login</span>
+            </button>
+          )}
         </div>
       </aside>
 
-      {/* MAIN */}
       <main className="for-you__main">
         <div className="for-you__topbar">
           <div className="for-you__search">
@@ -134,7 +144,17 @@ export default function SettingsPage() {
             <div className="settings-page__content">
               <div className="settings-page__row">
                 <h2>Your Subscription plan</h2>
-                <p>{userPlan}</p>
+                <p>{isPremium ? "premium-plus" : "Basic"}</p>
+
+                {isGoogleUser && !isPremium && (
+                  <button
+                    type="button"
+                    className="settings-page__upgrade-button"
+                    onClick={handleUpgrade}
+                  >
+                    Upgrade to Premium
+                  </button>
+                )}
               </div>
 
               <div className="settings-page__row">
@@ -165,12 +185,11 @@ export default function SettingsPage() {
         </div>
       </main>
 
-      {/* LOGIN MODAL */}
       <LoginModal
-  isOpen={isLoginModalOpen}
-  onClose={closeLoginModal}
-  redirectTo="/settings"
-/>
+        isOpen={isLoginModalOpen}
+        onClose={closeLoginModal}
+        redirectTo="/settings"
+      />
     </div>
   );
 }

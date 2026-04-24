@@ -235,8 +235,8 @@ export default function ForYouPage() {
         draggable={false}
       >
         {!isLoggedIn && book.subscriptionRequired && (
-          <span className="for-you__premium-pill">Premium</span>
-        )}
+  <span className="for-you__premium-pill">Premium</span>
+)}
 
         <div className="for-you__book-image-wrapper">
           <div className="for-you__book-image-bg" />

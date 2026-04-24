@@ -1,4 +1,5 @@
 "use client";
+
 import { FC, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaUser } from "react-icons/fa";
@@ -22,17 +23,16 @@ const LoginModal: FC<LoginModalProps> = ({
 
   if (!isOpen) return null;
 
-  // 🔐 FINAL LOGIN HANDLER
-  const finishLogin = (emailValue: string) => {
+  const finishLogin = (emailValue: string, loginMethod: "guest" | "google") => {
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem("userEmail", emailValue);
-    localStorage.setItem("userPlan", "free"); // 👈 important
+    localStorage.setItem("userPlan", "free");
+    localStorage.setItem("loginMethod", loginMethod);
 
     onClose();
     router.push(redirectTo);
   };
 
-  // 🔐 EMAIL LOGIN
   const handleLogin = () => {
     setError("");
 
@@ -51,18 +51,15 @@ const LoginModal: FC<LoginModalProps> = ({
       return;
     }
 
-    finishLogin(email);
+    finishLogin(email, "guest");
   };
 
-  // 👤 GUEST LOGIN
   const handleGuestLogin = () => {
-    finishLogin("guest@gmail.com");
+    finishLogin("guest@gmail.com", "guest");
   };
 
-  // 🔵 GOOGLE LOGIN (fake but working)
   const handleGoogleLogin = () => {
-    console.log("GOOGLE CLICKED"); // 👈 add this
-    finishLogin("google@gmail.com");
+    finishLogin("google@gmail.com", "google");
   };
 
   return (
@@ -78,7 +75,6 @@ const LoginModal: FC<LoginModalProps> = ({
 
         <h2 className="modal__title">Log in to Summarist</h2>
 
-        {/* 👤 GUEST */}
         <button
           type="button"
           className="modal__social modal__guest"
@@ -92,7 +88,6 @@ const LoginModal: FC<LoginModalProps> = ({
           <span>or</span>
         </div>
 
-        {/* 🔵 GOOGLE */}
         <button
           type="button"
           className="modal__social modal__google"
@@ -108,7 +103,6 @@ const LoginModal: FC<LoginModalProps> = ({
           <span>or</span>
         </div>
 
-        {/* EMAIL */}
         <input
           type="email"
           placeholder="Email Address"

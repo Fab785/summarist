@@ -2250,6 +2250,26 @@ button:disabled {
   filter: brightness(0.98);
 }
 
+.settings-page__upgrade-button {
+  margin-top: 12px;
+  padding: 10px 18px;
+  background: #22c55e;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+.settings-page__upgrade-button:hover {
+  background: #16a34a;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
 /* SKELETON */
 
 .skeleton-block,
