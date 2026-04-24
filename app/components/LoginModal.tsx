@@ -22,15 +22,17 @@ const LoginModal: FC<LoginModalProps> = ({
 
   if (!isOpen) return null;
 
+  // 🔐 FINAL LOGIN HANDLER
   const finishLogin = (emailValue: string) => {
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem("userEmail", emailValue);
-    localStorage.setItem("userPlan", "premium-plus");
+    localStorage.setItem("userPlan", "free"); // 👈 important
 
     onClose();
     router.push(redirectTo);
   };
 
+  // 🔐 EMAIL LOGIN
   const handleLogin = () => {
     setError("");
 
@@ -52,8 +54,15 @@ const LoginModal: FC<LoginModalProps> = ({
     finishLogin(email);
   };
 
+  // 👤 GUEST LOGIN
   const handleGuestLogin = () => {
     finishLogin("guest@gmail.com");
+  };
+
+  // 🔵 GOOGLE LOGIN (fake but working)
+  const handleGoogleLogin = () => {
+    console.log("GOOGLE CLICKED"); // 👈 add this
+    finishLogin("google@gmail.com");
   };
 
   return (
@@ -69,7 +78,9 @@ const LoginModal: FC<LoginModalProps> = ({
 
         <h2 className="modal__title">Log in to Summarist</h2>
 
+        {/* 👤 GUEST */}
         <button
+          type="button"
           className="modal__social modal__guest"
           onClick={handleGuestLogin}
         >
@@ -81,7 +92,12 @@ const LoginModal: FC<LoginModalProps> = ({
           <span>or</span>
         </div>
 
-        <button className="modal__social modal__google">
+        {/* 🔵 GOOGLE */}
+        <button
+          type="button"
+          className="modal__social modal__google"
+          onClick={handleGoogleLogin}
+        >
           <span className="google__icon">
             <img src="/assets/google.png" alt="Google" />
           </span>
@@ -92,6 +108,7 @@ const LoginModal: FC<LoginModalProps> = ({
           <span>or</span>
         </div>
 
+        {/* EMAIL */}
         <input
           type="email"
           placeholder="Email Address"
@@ -108,7 +125,7 @@ const LoginModal: FC<LoginModalProps> = ({
 
         {error && <p className="modal__error">{error}</p>}
 
-        <button className="btn" onClick={handleLogin}>
+        <button type="button" className="btn" onClick={handleLogin}>
           Login
         </button>
 
