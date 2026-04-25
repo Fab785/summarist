@@ -11,8 +11,8 @@ import {
   FiHelpCircle,
   FiLogOut,
 } from "react-icons/fi";
-import { FaSearch } from "react-icons/fa";
 import LoginModal from "@/app/components/LoginModal";
+import SearchBar from "@/app/components/SearchBar";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -63,9 +63,9 @@ export default function SettingsPage() {
   const handleUpgrade = () => {
     router.push("/upgrade");
   };
-
-  const isPremium = userPlan === "premium-plus";
+  
   const isGoogleUser = loginMethod === "google";
+  const isPremium = userPlan === "premium-plus";
 
   return (
     <div className="for-you-page">
@@ -131,11 +131,9 @@ export default function SettingsPage() {
 
       <main className="for-you__main">
         <div className="for-you__topbar">
-          <div className="for-you__search">
-            <input placeholder="Search for books" />
-            <FaSearch />
-          </div>
+        <SearchBar />
         </div>
+    
 
         <div className="settings-page">
           <h1 className="settings-page__title">Settings</h1>

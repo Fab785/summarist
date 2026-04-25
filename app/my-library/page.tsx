@@ -14,6 +14,7 @@ import {
   FiX,
 } from "react-icons/fi";
 import { FaClock, FaStar } from "react-icons/fa";
+import SearchBar from "@/app/components/SearchBar";
 
 type Book = {
   id: string;
@@ -488,12 +489,7 @@ export default function MyLibraryPage() {
 
       <main className="for-you__main">
         <div className="for-you__topbar">
-          <div className="for-you__search">
-            <input type="text" placeholder="Search for books" />
-            <button type="button">
-              <FiSearch />
-            </button>
-          </div>
+        <SearchBar />
 
           <button
             className="for-you__mobile-menu-btn"

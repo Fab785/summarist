@@ -15,6 +15,7 @@ import {
 } from "react-icons/fi";
 import { FaPlay, FaPause } from "react-icons/fa";
 import { MdReplay10, MdForward10 } from "react-icons/md";
+import SearchBar from "@/app/components/SearchBar";
 
 type Book = {
   id: string;
@@ -408,12 +409,7 @@ export default function PlayerPage() {
 
       <main className="for-you__main player-page">
         <div className="for-you__topbar">
-          <div className="for-you__search">
-            <input type="text" placeholder="Search for books" />
-            <button type="button">
-              <FiSearch />
-            </button>
-          </div>
+        <SearchBar />
 
           <button
             type="button"
