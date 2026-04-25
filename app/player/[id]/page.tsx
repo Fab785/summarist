@@ -46,10 +46,24 @@ export default function PlayerPage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [fallbackDuration, setFallbackDuration] = useState(0);
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const getFallbackDurationByTitle = (title: string) => {
+    const durations: Record<string, number> = {
+      "The Lean Startup": 203,
+      "How to Win Friends and Influence People in the Digital Age": 204,
+      "Can't Hurt Me": 292,
+      Mastery: 280,
+      "Atomic Habits": 204,
+      "How to Talk to Anyone": 202,
+    };
+
+    return durations[title] || 0;
+  };
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -79,6 +93,10 @@ export default function PlayerPage() {
         );
 
         setBook(matchedBook || null);
+
+        if (matchedBook?.title) {
+          setFallbackDuration(getFallbackDurationByTitle(matchedBook.title));
+        }
       } catch (error) {
         console.error("Error fetching book:", error);
         setBook(null);
@@ -228,7 +246,7 @@ export default function PlayerPage() {
     const safeDuration =
       Number.isFinite(audio.duration) && audio.duration > 0
         ? audio.duration
-        : duration;
+        : duration || fallbackDuration;
 
     const nextTime = Math.min(
       Math.max(audio.currentTime + seconds, 0),
@@ -243,16 +261,20 @@ export default function PlayerPage() {
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     const audio = audioRef.current;
-    if (!audio || duration === 0) return;
+    const displayDuration = duration || fallbackDuration;
+
+    if (!audio || displayDuration === 0) return;
 
     const rect = event.currentTarget.getBoundingClientRect();
     const clickX = event.clientX - rect.left;
     const percent = clickX / rect.width;
-    const newTime = percent * duration;
+    const newTime = percent * displayDuration;
 
     audio.currentTime = newTime;
     setCurrentTime(newTime);
   };
+
+  const displayDuration = duration || fallbackDuration;
 
   return (
     <div className="for-you-page player-layout">
@@ -443,70 +465,85 @@ export default function PlayerPage() {
               </div>
             </div>
 
-            <audio ref={audioRef} src={book.audioLink} preload="metadata" />
+            <audio
+  ref={audioRef}
+  src={book.audioLink}
+  preload="metadata"
+  onLoadedMetadata={(e) => {
+    const audio = e.currentTarget;
+    if (Number.isFinite(audio.duration) && audio.duration > 0) {
+      setDuration(audio.duration);
+    }
+  }}
+  onTimeUpdate={(e) => {
+    setCurrentTime(e.currentTarget.currentTime);
+  }}
+  onEnded={() => {
+    setIsPlaying(false);
+    setCurrentTime(0);
+  }}
+/>
 
-            <div className="player-page__bottom-bar">
-              <div className="player-page__bottom-left">
-                <img
-                  src={book.imageLink}
-                  alt={book.title}
-                  className="player-page__bottom-image"
-                />
+<div className="player-page__bottom-bar">
+  <div className="player-page__bottom-left">
+    <img
+      src={book.imageLink}
+      alt={book.title}
+      className="player-page__bottom-image"
+    />
 
-                <div className="player-page__bottom-book-info">
-                  <h3>{book.title}</h3>
-                  <p>{book.author}</p>
-                </div>
-              </div>
+    <div className="player-page__bottom-book-info">
+      <h3>{book.title}</h3>
+      <p>{book.author}</p>
+    </div>
+  </div>
 
-              <div className="player-page__bottom-center">
-                <button
-                  className="player-page__audio-skip-btn"
-                  onClick={() => handleSkip(-10)}
-                  type="button"
-                >
-                  <MdReplay10 />
-                </button>
+  <div className="player-page__bottom-center">
+    <button
+      className="player-page__audio-skip-btn"
+      onClick={() => handleSkip(-10)}
+      type="button"
+    >
+      <MdReplay10 />
+    </button>
 
-                <button
-                  className="player-page__audio-play"
-                  onClick={handlePlayPause}
-                  type="button"
-                >
-                  {isPlaying ? <FaPause /> : <FaPlay />}
-                </button>
+    <button
+      className="player-page__audio-play"
+      onClick={handlePlayPause}
+      type="button"
+    >
+      {isPlaying ? <FaPause /> : <FaPlay />}
+    </button>
 
-                <button
-                  className="player-page__audio-skip-btn"
-                  onClick={() => handleSkip(10)}
-                  type="button"
-                >
-                  <MdForward10 />
-                </button>
-              </div>
+    <button
+      className="player-page__audio-skip-btn"
+      onClick={() => handleSkip(10)}
+      type="button"
+    >
+      <MdForward10 />
+    </button>
+  </div>
 
-              <div className="player-page__bottom-right">
-                <span>{formatTime(currentTime)}</span>
+  <div className="player-page__bottom-right">
+    <span>{formatTime(currentTime)}</span>
 
-                <div
-                  className="player-page__audio-progress"
-                  onClick={handleProgressClick}
-                >
-                  <div
-                    className="player-page__audio-progress-fill"
-                    style={{
-                      width: `${
-                        duration > 0 ? (currentTime / duration) * 100 : 0
-                      }%`,
-                    }}
-                  >
-                    <div className="player-page__audio-thumb" />
-                  </div>
-                </div>
+    <div
+      className="player-page__audio-progress"
+      onClick={handleProgressClick}
+    >
+      <div
+        className="player-page__audio-progress-fill"
+        style={{
+          width: `${duration > 0 ? (currentTime / duration) * 100 : 0}%`,
+        }}
+      >
+        <div className="player-page__audio-thumb" />
+      </div>
+    </div>
 
-                <span>{formatTime(duration)}</span>
-              </div>
-            </div>
+    <span>{formatTime(duration)}</span>
+  </div>
+</div>
           </>
         )}
       </main>
