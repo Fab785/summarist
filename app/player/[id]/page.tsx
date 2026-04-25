@@ -103,66 +103,54 @@ export default function PlayerPage() {
     const audio = audioRef.current;
     if (!audio || !book?.audioLink) return;
 
-    const handleLoadedMetadata = () => {
-      setDuration(Number.isFinite(audio.duration) ? audio.duration : 0);
+    setIsPlaying(false);
+    setCurrentTime(0);
+    setDuration(0);
+    audio.currentTime = 0;
+
+    const updateDuration = () => {
+      if (Number.isFinite(audio.duration) && audio.duration > 0) {
+        setDuration(audio.duration);
+      }
     };
 
-    const handleTimeUpdate = () => {
+    const updateTime = () => {
       setCurrentTime(audio.currentTime);
+
+      if (Number.isFinite(audio.duration) && audio.duration > 0) {
+        setDuration(audio.duration);
+      }
     };
 
-    const handlePlay = () => {
-      setIsPlaying(true);
-    };
-
-    const handlePause = () => {
-      setIsPlaying(false);
-    };
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
 
     const handleEnded = () => {
       setIsPlaying(false);
-      setCurrentTime(0);
       audio.currentTime = 0;
+      setCurrentTime(0);
     };
 
-    const handleDurationChange = () => {
-      setDuration(Number.isFinite(audio.duration) ? audio.duration : 0);
-    };
-
-    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
-    audio.addEventListener("durationchange", handleDurationChange);
-    audio.addEventListener("timeupdate", handleTimeUpdate);
+    audio.addEventListener("loadedmetadata", updateDuration);
+    audio.addEventListener("canplay", updateDuration);
+    audio.addEventListener("durationchange", updateDuration);
+    audio.addEventListener("timeupdate", updateTime);
     audio.addEventListener("play", handlePlay);
     audio.addEventListener("pause", handlePause);
     audio.addEventListener("ended", handleEnded);
 
-    if (audio.readyState >= 1) {
-      setDuration(Number.isFinite(audio.duration) ? audio.duration : 0);
-    }
+    audio.load();
 
     return () => {
       audio.pause();
-      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
-      audio.removeEventListener("durationchange", handleDurationChange);
-      audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.removeEventListener("loadedmetadata", updateDuration);
+      audio.removeEventListener("canplay", updateDuration);
+      audio.removeEventListener("durationchange", updateDuration);
+      audio.removeEventListener("timeupdate", updateTime);
       audio.removeEventListener("play", handlePlay);
       audio.removeEventListener("pause", handlePause);
       audio.removeEventListener("ended", handleEnded);
     };
-  }, [book]);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    audio.pause();
-    setIsPlaying(false);
-    setCurrentTime(0);
-    setDuration(0);
-
-    if (book?.audioLink) {
-      audio.load();
-    }
   }, [book?.audioLink]);
 
   useEffect(() => {
@@ -191,11 +179,14 @@ export default function PlayerPage() {
     try {
       if (audio.paused) {
         await audio.play();
+        setIsPlaying(true);
       } else {
         audio.pause();
+        setIsPlaying(false);
       }
     } catch (error) {
       console.error("Audio play failed:", error);
+      setIsPlaying(false);
     }
   };
 
@@ -203,9 +194,14 @@ export default function PlayerPage() {
     const audio = audioRef.current;
     if (!audio) return;
 
+    const safeDuration =
+      Number.isFinite(audio.duration) && audio.duration > 0
+        ? audio.duration
+        : duration;
+
     const nextTime = Math.min(
       Math.max(audio.currentTime + seconds, 0),
-      duration || 0
+      safeDuration || 0
     );
 
     audio.currentTime = nextTime;
@@ -377,10 +373,6 @@ export default function PlayerPage() {
               <div className="skeleton-line skeleton-line--player-paragraph" />
               <div className="skeleton-line skeleton-line--player-paragraph" />
               <div className="skeleton-line skeleton-line--player-paragraph short" />
-              <div className="skeleton-line skeleton-line--player-section" />
-              <div className="skeleton-line skeleton-line--player-paragraph" />
-              <div className="skeleton-line skeleton-line--player-paragraph" />
-              <div className="skeleton-line skeleton-line--player-paragraph short" />
             </div>
           </div>
         ) : !book ? (
@@ -414,10 +406,7 @@ export default function PlayerPage() {
               </div>
             </div>
 
-            <audio ref={audioRef} preload="metadata">
-              <source src={book.audioLink} type="audio/mpeg" />
-              Your browser does not support the audio element.
-            </audio>
+            <audio ref={audioRef} src={book.audioLink} preload="metadata" />
 
             <div className="player-page__bottom-bar">
               <div className="player-page__bottom-left">

@@ -3234,3 +3234,13 @@ button:disabled {
     max-width: 320px;
   }
 }
+
+.player-page__mobile-sidebar-top {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .player-page__mobile-sidebar-top {
+    display: flex;
+  }
+}
