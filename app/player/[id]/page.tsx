@@ -94,9 +94,7 @@ export default function PlayerPage() {
       }
     };
 
-    if (id) {
-      fetchBook();
-    }
+    if (id) fetchBook();
   }, [id]);
 
   useEffect(() => {
@@ -154,7 +152,34 @@ export default function PlayerPage() {
   }, [book?.audioLink]);
 
   useEffect(() => {
+    let animationFrameId: number;
+
+    const updateProgress = () => {
+      const audio = audioRef.current;
+
+      if (audio && !audio.paused) {
+        setCurrentTime(audio.currentTime);
+
+        if (Number.isFinite(audio.duration) && audio.duration > 0) {
+          setDuration(audio.duration);
+        }
+
+        animationFrameId = requestAnimationFrame(updateProgress);
+      }
+    };
+
+    if (isPlaying) {
+      animationFrameId = requestAnimationFrame(updateProgress);
+    }
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [isPlaying]);
+
+  useEffect(() => {
     document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+
     return () => {
       document.body.style.overflow = "";
     };
@@ -180,9 +205,15 @@ export default function PlayerPage() {
       if (audio.paused) {
         await audio.play();
         setIsPlaying(true);
+        setCurrentTime(audio.currentTime);
+
+        if (Number.isFinite(audio.duration) && audio.duration > 0) {
+          setDuration(audio.duration);
+        }
       } else {
         audio.pause();
         setIsPlaying(false);
+        setCurrentTime(audio.currentTime);
       }
     } catch (error) {
       console.error("Audio play failed:", error);
@@ -271,12 +302,18 @@ export default function PlayerPage() {
               <span>My Library</span>
             </Link>
 
-            <button className="for-you__nav-link for-you__nav-link--inactive">
+            <button
+              className="for-you__nav-link for-you__nav-link--inactive"
+              type="button"
+            >
               <FiEdit3 />
               <span>Highlights</span>
             </button>
 
-            <button className="for-you__nav-link for-you__nav-link--inactive">
+            <button
+              className="for-you__nav-link for-you__nav-link--inactive"
+              type="button"
+            >
               <FiSearch />
               <span>Search</span>
             </button>
@@ -330,17 +367,17 @@ export default function PlayerPage() {
         </div>
 
         <div className="for-you__sidebar-bottom">
-          <button className="for-you__nav-link">
+          <button className="for-you__nav-link" type="button">
             <FiSettings />
             <span>Settings</span>
           </button>
 
-          <button className="for-you__nav-link">
+          <button className="for-you__nav-link" type="button">
             <FiHelpCircle />
             <span>Help &amp; Support</span>
           </button>
 
-          <button className="for-you__nav-link">
+          <button className="for-you__nav-link" type="button">
             <FiLogOut />
             <span>Logout</span>
           </button>
@@ -415,6 +452,7 @@ export default function PlayerPage() {
                   alt={book.title}
                   className="player-page__bottom-image"
                 />
+
                 <div className="player-page__bottom-book-info">
                   <h3>{book.title}</h3>
                   <p>{book.author}</p>
