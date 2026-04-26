@@ -3197,7 +3197,7 @@ button:disabled {
 
 .upgrade-action {
   position: sticky;
-  bottom: 0;
+  bottom: 40px;
   z-index: 30;
   background: #ffffff;
   text-align: center;
