@@ -3139,20 +3139,19 @@ button:disabled {
   object-fit: contain;
 }
 
-.upgrade-hero__placeholder {
-  width: 200px;
-  height: 120px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #e5e7eb, #cbd5e1);
-}
-
 .upgrade-benefits {
   max-width: 900px;
-  margin: 48px auto 32px;
+  margin: 40px auto 24px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 48px;
   text-align: center;
+}
+
+.upgrade-benefit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .upgrade-benefit svg {
@@ -3172,20 +3171,12 @@ button:disabled {
   font-weight: 700;
 }
 
-.upgrade-sticky-area {
-  position: relative;
-  max-width: 760px;
-  margin: 0 auto 80px;
-  padding: 0 24px;
-  display: flex;
-  flex-direction: column;
-}
-
+/* DRAWER AREA */
 .upgrade-drawer {
   position: relative;
   max-width: 760px;
   margin: 0 auto 64px;
-  padding: 0 24px 32px;
+  padding: 0 24px 40px;
 }
 
 .upgrade-plans {
@@ -3193,46 +3184,9 @@ button:disabled {
   width: 100%;
   margin: 120px auto 0;
   padding: 0;
-}
-
-.upgrade-action {
-  position: sticky;
-  bottom: 40px;
-  z-index: 30;
-  background: #ffffff;
-  text-align: center;
-  padding: 20px 0 28px;
-  margin: 0;
-}
-
-.upgrade-faq {
   position: relative;
-  z-index: 40;
-  background: #ffffff;
+  z-index: 2;
 }
-
-.upgrade-action button {
-  width: 320px;
-  height: 44px;
-  background: #2bd97f;
-  border: none;
-  border-radius: 4px;
-  color: #032b41;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.upgrade-action button:hover {
-  filter: brightness(0.96);
-}
-
-.upgrade-action p {
-  margin-top: 14px;
-  font-size: 13px;
-  color: #6b757b;
-}
-
 
 .upgrade-plans h2 {
   text-align: center;
@@ -3308,7 +3262,44 @@ button:disabled {
   flex: 1;
 }
 
+/* CTA */
+.upgrade-action {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  background: #ffffff;
+  text-align: center;
+  padding: 20px 0 24px;
+  margin-top: 40px;
+}
+
+.upgrade-action button {
+  width: 320px;
+  height: 44px;
+  background: #2bd97f;
+  border: none;
+  border-radius: 4px;
+  color: #032b41;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.upgrade-action button:hover {
+  filter: brightness(0.96);
+}
+
+.upgrade-action p {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #6b757b;
+}
+
+/* FAQ */
 .upgrade-faq {
+  position: relative;
+  z-index: 10;
+  background: #ffffff;
   max-width: 1090px;
   margin: 0 auto 42px;
   padding: 0 24px;
@@ -3343,6 +3334,7 @@ button:disabled {
   line-height: 1.5;
 }
 
+/* FOOTER */
 .upgrade-footer {
   background: #f1f6f4;
   padding: 72px 24px 24px;
@@ -3373,24 +3365,6 @@ button:disabled {
   margin-top: 56px !important;
   color: #032b41 !important;
   font-weight: 700;
-}
-
-@media (max-width: 768px) {
-  .upgrade-plans h2 {
-    font-size: 28px;
-  }
-
-  .upgrade-plan h4 {
-    font-size: 24px;
-  }
-
-  .upgrade-faq__question {
-    font-size: 22px;
-  }
-
-  .upgrade-footer__inner {
-    grid-template-columns: 1fr 1fr;
-  }
 }
 
 @media (max-width: 768px) {
@@ -3427,7 +3401,23 @@ button:disabled {
     max-width: 320px;
   }
 
+  .upgrade-plans h2 {
+    font-size: 28px;
+  }
+
+  .upgrade-plan h4 {
+    font-size: 24px;
+  }
+
+  .upgrade-faq__question {
+    font-size: 22px;
+  }
+
+  .upgrade-footer__inner {
+    grid-template-columns: 1fr 1fr;
+  }
 }
+
 .player-page__burger-btn {
   display: none;
 }
