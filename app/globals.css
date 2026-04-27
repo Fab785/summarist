@@ -3183,9 +3183,19 @@ button:disabled {
   max-width: 720px;
   width: 100%;
   margin: 80px auto 0;
-  padding: 0;
+  padding: 0 0 56px;
   position: relative;
-  z-index: 2;
+  z-index: 1;
+}
+
+.upgrade-action {
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+  background: #ffffff;
+  text-align: center;
+  padding: 20px 0 24px;
+  margin-top: -40px;
 }
 
 .upgrade-plans h2 {
@@ -3263,15 +3273,6 @@ button:disabled {
 }
 
 /* CTA */
-.upgrade-action {
-  position: sticky;
-  bottom: 0;
-  z-index: 5;
-  background: #ffffff;
-  text-align: center;
-  padding: 20px 0 24px;
-  margin-top: -72px;
-}
 
 .upgrade-action button {
   width: 320px;
