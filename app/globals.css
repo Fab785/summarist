@@ -3182,7 +3182,7 @@ button:disabled {
 .upgrade-plans {
   max-width: 720px;
   width: 100%;
-  margin: 120px auto 0;
+  margin: 170px auto 0;
   padding: 0;
   position: relative;
   z-index: 2;
@@ -3270,7 +3270,7 @@ button:disabled {
   background: #ffffff;
   text-align: center;
   padding: 20px 0 24px;
-  margin-top: 40px;
+  margin-top: -72px;
 }
 
 .upgrade-action button {
