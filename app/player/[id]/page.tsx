@@ -390,21 +390,28 @@ export default function PlayerPage() {
         </div>
 
         <div className="for-you__sidebar-bottom">
-          <button className="for-you__nav-link" type="button">
-            <FiSettings />
-            <span>Settings</span>
-          </button>
+  <Link
+    href="/settings"
+    className="for-you__nav-link for-you__nav-link--clickable"
+    onClick={(e) => {
+      e.stopPropagation();
+      setIsMobileMenuOpen(false);
+    }}
+  >
+    <FiSettings />
+    <span>Settings</span>
+  </Link>
 
-          <button className="for-you__nav-link" type="button">
-            <FiHelpCircle />
-            <span>Help &amp; Support</span>
-          </button>
+  <button className="for-you__nav-link" type="button">
+    <FiHelpCircle />
+    <span>Help &amp; Support</span>
+  </button>
 
-          <button className="for-you__nav-link" type="button">
-            <FiLogOut />
-            <span>Logout</span>
-          </button>
-        </div>
+  <button className="for-you__nav-link" type="button">
+    <FiLogOut />
+    <span>Logout</span>
+  </button>
+</div>
       </aside>
 
       <main className="for-you__main player-page">
