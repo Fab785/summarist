@@ -44,9 +44,25 @@ export default function UpgradePage() {
       ? "Cancel your trial at any time before it ends, and you won’t be charged."
       : "You will be charged monthly until you cancel your subscription.";
 
-  const handleCheckout = () => {
-    console.log("Selected plan:", selectedPlan);
-  };
+      const handleCheckout = async () => {
+        try {
+          const response = await fetch("/api/checkout", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ plan: selectedPlan }),
+          });
+      
+          const data = await response.json();
+      
+          if (data.url) {
+            window.location.href = data.url;
+          }
+        } catch (error) {
+          console.error("Checkout error:", error);
+        }
+      };
 
   return (
     <main className="upgrade-page">
